@@ -1,0 +1,16 @@
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\bin\Debug\Asteroids.exe.config
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\bin\Debug\Asteroids.exe
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\bin\Debug\Asteroids.pdb
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\obj\Debug\Asteroids.csprojAssemblyReference.cache
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\obj\Debug\Asteroids.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\obj\Debug\Asteroids.exe
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\obj\Debug\Asteroids.pdb
+C:\Users\Pablo\source\repos\Asteroids\Asteroids\obj\Debug\Asteroids.csproj.CopyComplete
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\bin\Debug\Asteroids.exe.config
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\bin\Debug\Asteroids.exe
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\bin\Debug\Asteroids.pdb
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.csprojAssemblyReference.cache
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.csproj.CopyComplete
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.exe
+C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.pdb
