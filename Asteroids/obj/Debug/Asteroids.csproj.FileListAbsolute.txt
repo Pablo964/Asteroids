@@ -14,3 +14,11 @@ C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Aster
 C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.csproj.CopyComplete
 C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.exe
 C:\Users\Pablo\Desktop\proyecto_programacion\Asteroids\Asteroids\obj\Debug\Asteroids.pdb
+C:\Users\pablo\Desktop\Asteroids\Asteroids\bin\Debug\Asteroids.exe.config
+C:\Users\pablo\Desktop\Asteroids\Asteroids\bin\Debug\Asteroids.exe
+C:\Users\pablo\Desktop\Asteroids\Asteroids\bin\Debug\Asteroids.pdb
+C:\Users\pablo\Desktop\Asteroids\Asteroids\obj\Debug\Asteroids.csprojAssemblyReference.cache
+C:\Users\pablo\Desktop\Asteroids\Asteroids\obj\Debug\Asteroids.csproj.CoreCompileInputs.cache
+C:\Users\pablo\Desktop\Asteroids\Asteroids\obj\Debug\Asteroids.csproj.CopyComplete
+C:\Users\pablo\Desktop\Asteroids\Asteroids\obj\Debug\Asteroids.exe
+C:\Users\pablo\Desktop\Asteroids\Asteroids\obj\Debug\Asteroids.pdb

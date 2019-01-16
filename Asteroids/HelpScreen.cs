@@ -1,4 +1,6 @@
-﻿class CreditsScreen
+﻿using System;
+
+class HelpScreen
 {
     public void Run()
     {

@@ -1,5 +1,4 @@
-﻿
-class EndEscene
+﻿class EndEscene
 {
     public void Run()
     {

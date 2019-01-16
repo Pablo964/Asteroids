@@ -52,6 +52,7 @@
     <Compile Include="EndEscene.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="HelpScreen.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SdlHardware.cs" />

@@ -1,5 +1,4 @@
-﻿
-class WelcomeScreen
+﻿class WelcomeScreen
 {
     public void Run()
     {
