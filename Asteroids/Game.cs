@@ -21,33 +21,44 @@ class Game
 
     static bool fullScreen;
 
-    static Image player;
-    static int playerX, playerY, playerSpeed;
-    static int playerWidth, playerHeight;
+    //static Image player;
+    //static int playerX, playerY, playerSpeed;
+    //static int playerWidth, playerHeight;
+    static Player player;
 
-    static int numEnemies;
-    static Image enemy;
-    static int enemyWidth;
-    static int enemyHeight;
-    static typeEnemy[] enemies;
+    /* static int numEnemies;
+     static Image enemy;
+     static int enemyWidth;
+     static int enemyHeight;
+     static typeEnemy[] enemies;*/
+
+    static Enemy enemy;
+
 
     static bool finished;
 
+
+
+
+
     static void Init()
     {
-        player = new Image("data/player.png");
+        /*player = new Image("data/player.png");
         playerX = 50;
         playerY = 120;
         playerSpeed = 8;
         playerWidth = 32;
-        playerHeight = 64;
+        playerHeight = 64;*/
+        player = new Player();
 
         numEnemies = 2;
         enemies = new typeEnemy[numEnemies];
 
-        enemy = new Image("data/enemy.png");
-        enemyWidth = 64;
-        enemyHeight = 64;
+        /* enemy = new Image("data/enemy.png");
+         enemyWidth = 64;
+         enemyHeight = 64;*/
+
+        enemy = new Enemy();
 
         finished = false;
 
@@ -70,7 +81,8 @@ class Game
             0xCC, 0xCC, 0xCC,
             font18);
 
-        SdlHardware.DrawHiddenImage(player, playerX, playerY);
+        //  SdlHardware.DrawHiddenImage(player, playerX, playerY);
+        player.DrawOnHiddenScreen();
         for (int i = 0; i < numEnemies; i++)
             SdlHardware.DrawHiddenImage(enemy, enemies[i].x, enemies[i].y);
         SdlHardware.ShowHiddenScreen();
@@ -79,13 +91,17 @@ class Game
     static void CheckUserInput()
     {
         if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
-            playerX += playerSpeed;
+            // playerX += playerSpeed;
+            player.MoveRight();
         if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
-            playerX -= playerSpeed;
+            // playerX -= playerSpeed;
+            player.MoveLeft();
         if (SdlHardware.KeyPressed(SdlHardware.KEY_UP))
-            playerY -= playerSpeed;
+            // playerY -= playerSpeed;
+            player.MoveTop();
         if (SdlHardware.KeyPressed(SdlHardware.KEY_DOWN))
-            playerY += playerSpeed;
+            // playerY += playerSpeed;
+            player.MoveDown();
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
             finished = true;
