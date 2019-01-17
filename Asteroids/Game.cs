@@ -12,33 +12,29 @@ using System;
 
 class Game
 {
-    struct typeEnemy
+    /*struct typeEnemy
     {
         public int x;
         public int y;
         public int speed;
-    }
+    }*/
 
-    static bool fullScreen;
+    
 
     //static Image player;
     //static int playerX, playerY, playerSpeed;
     //static int playerWidth, playerHeight;
     static Player player;
 
-    /* static int numEnemies;
-     static Image enemy;
-     static int enemyWidth;
-     static int enemyHeight;
-     static typeEnemy[] enemies;*/
+    static int numEnemies;
+  /*static Image enemy;
+    static int enemyWidth;
+    static int enemyHeight;
+    static typeEnemy[] enemies;*/
 
-    static Enemy enemy;
-
+    static Enemy[] enemies;
 
     static bool finished;
-
-
-
 
 
     static void Init()
@@ -52,22 +48,26 @@ class Game
         player = new Player();
 
         numEnemies = 2;
-        enemies = new typeEnemy[numEnemies];
+        enemies = new Enemy[numEnemies];
 
         /* enemy = new Image("data/enemy.png");
          enemyWidth = 64;
          enemyHeight = 64;*/
 
-        enemy = new Enemy();
+        for (int i = 0; i < numEnemies; i++)
+        {
+            enemies[i] = new Enemy();
+        }
 
         finished = false;
 
         Random rnd = new Random();
         for (int i = 0; i < numEnemies; i++)
         {
-            enemies[i].x = rnd.Next(200, 800);
-            enemies[i].y = rnd.Next(50, 600);
-            enemies[i].speed = rnd.Next(1, 5);
+            enemies[i].MoveTo(rnd.Next(200, 800),
+                rnd.Next(50, 600));
+            enemies[i].SetSpeed(rnd.Next(1, 5),
+                rnd.Next(1, 5));
         }
     }
 
@@ -84,7 +84,8 @@ class Game
         //  SdlHardware.DrawHiddenImage(player, playerX, playerY);
         player.DrawOnHiddenScreen();
         for (int i = 0; i < numEnemies; i++)
-            SdlHardware.DrawHiddenImage(enemy, enemies[i].x, enemies[i].y);
+            //SdlHardware.DrawHiddenImage(enemy, enemies[i].x, enemies[i].y);
+            enemies[i].DrawOnHiddenScreen();
         SdlHardware.ShowHiddenScreen();
     }
 

@@ -5,7 +5,7 @@
         LoadImage("data/player.png");
         x = 50;
         y = 120;
-        xSpeed = 8;
+        xSpeed = ySpeed = 8;
         width = 32;
         height = 64;
     }

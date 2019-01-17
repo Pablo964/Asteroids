@@ -3,7 +3,7 @@ class Enemy : Sprite
 {
     public Enemy()
     {
-        LoadImage("data/player.png");
+        LoadImage("data/enemy.png");
         x = 50;
         y = 120;
         xSpeed = 8;
