@@ -12,47 +12,27 @@ using System;
 
 class Game
 {
-    /*struct typeEnemy
-    {
-        public int x;
-        public int y;
-        public int speed;
-    }*/
 
-    
-
-    //static Image player;
-    //static int playerX, playerY, playerSpeed;
-    //static int playerWidth, playerHeight;
     static Player player;
 
     static int numEnemies;
-  /*static Image enemy;
-    static int enemyWidth;
-    static int enemyHeight;
-    static typeEnemy[] enemies;*/
+
 
     static Enemy[] enemies;
 
+    protected Room room;
+
     static bool finished;
 
+    protected Font font18;
 
-    static void Init()
+    void Init()
     {
-        /*player = new Image("data/player.png");
-        playerX = 50;
-        playerY = 120;
-        playerSpeed = 8;
-        playerWidth = 32;
-        playerHeight = 64;*/
         player = new Player();
 
         numEnemies = 2;
         enemies = new Enemy[numEnemies];
 
-        /* enemy = new Image("data/enemy.png");
-         enemyWidth = 64;
-         enemyHeight = 64;*/
 
         for (int i = 0; i < numEnemies; i++)
         {
@@ -69,39 +49,45 @@ class Game
             enemies[i].SetSpeed(rnd.Next(1, 5),
                 rnd.Next(1, 5));
         }
-    }
 
-    static void UpdateScreen()
-    {
         Font font18 = new Font("data/Joystix.ttf", 18);
-        SdlHardware.ClearScreen();
+        
 
         SdlHardware.WriteHiddenText("Score: ",
             40, 10,
             0xCC, 0xCC, 0xCC,
             font18);
 
-        //  SdlHardware.DrawHiddenImage(player, playerX, playerY);
+        room = new Room();
+    }
+
+    
+
+    void UpdateScreen()
+    {
+        SdlHardware.ClearScreen();
+
+        room.DrawOnHiddenScreen();
+
         player.DrawOnHiddenScreen();
         for (int i = 0; i < numEnemies; i++)
-            //SdlHardware.DrawHiddenImage(enemy, enemies[i].x, enemies[i].y);
             enemies[i].DrawOnHiddenScreen();
         SdlHardware.ShowHiddenScreen();
     }
 
+
     static void CheckUserInput()
     {
         if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
-            // playerX += playerSpeed;
             player.MoveRight();
+
         if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
-            // playerX -= playerSpeed;
             player.MoveLeft();
+
         if (SdlHardware.KeyPressed(SdlHardware.KEY_UP))
-            // playerY -= playerSpeed;
             player.MoveTop();
+
         if (SdlHardware.KeyPressed(SdlHardware.KEY_DOWN))
-            // playerY += playerSpeed;
             player.MoveDown();
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
@@ -111,13 +97,16 @@ class Game
     static void UpdateWorld()
     {
         // Move enemies, background, etc 
-        // TO DO
+        for (int i = 0; i < numEnemies; i++)
+            enemies[i].Move();
     }
 
     static void CheckGameStatus()
     {
         // Check collisions and apply game logic
-        // TO DO
+        for (int i = 0; i < numEnemies; i++)
+            if (player.CollisionsWith(enemies[i]))
+                finished = true;
     }
 
     static void PauseUntilNextFrame()

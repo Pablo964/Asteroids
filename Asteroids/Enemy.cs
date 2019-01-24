@@ -4,11 +4,18 @@ class Enemy : Sprite
     public Enemy()
     {
         LoadImage("data/enemy.png");
-        x = 50;
-        y = 120;
-        xSpeed = 8;
         width = 32;
         height = 64;
+        xSpeed = 8;
+
+    }
+
+    public override void Move()
+    {
+        x += xSpeed;
+
+        if ((x < 50) || (x > 970))
+            xSpeed = -xSpeed;
     }
 }
 
