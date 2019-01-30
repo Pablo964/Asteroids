@@ -26,9 +26,10 @@ class Game
 
     protected Font font18;
 
-    void Init()
+    public Game()
     {
         player = new Player();
+        player.MoveTo(200, 100);
 
         numEnemies = 2;
         enemies = new Enemy[numEnemies];
@@ -76,19 +77,37 @@ class Game
     }
 
 
-    static void CheckUserInput()
+    void CheckUserInput()
     {
         if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
-            player.MoveRight();
+        {
+            if (room.CanMoveTo(player.GetX() + player.GetSpeedX(),
+                    player.GetY(),
+                    player.GetX() + player.GetWidth() + player.GetSpeedX(),
+                    player.GetY() + player.GetHeight()))
+                player.MoveRight();
+        }    
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
-            player.MoveLeft();
+            if (room.CanMoveTo(player.GetX() - player.GetSpeedX(),
+                    player.GetY(),
+                    player.GetX() + player.GetWidth() - player.GetSpeedX(),
+                    player.GetY() + player.GetHeight()))
+                player.MoveLeft();
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_UP))
-            player.MoveTop();
+            if (room.CanMoveTo(player.GetX(),
+                    player.GetY() - player.GetSpeedY(),
+                    player.GetX() + player.GetWidth(),
+                    player.GetY() + player.GetHeight() - player.GetSpeedY()))
+                player.MoveUp();
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_DOWN))
-            player.MoveDown();
+            if (room.CanMoveTo(player.GetX(),
+                    player.GetY() + player.GetSpeedY(),
+                    player.GetX() + player.GetWidth(),
+                    player.GetY() + player.GetHeight() + player.GetSpeedY()))
+                player.MoveDown();
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
             finished = true;
@@ -122,8 +141,6 @@ class Game
 
     public void Run()
     {
-        Init();
-
         do
         {
             UpdateScreen();

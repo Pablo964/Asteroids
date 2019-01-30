@@ -6,8 +6,8 @@
         x = 50;
         y = 120;
         xSpeed = ySpeed = 8;
-        width = 32;
-        height = 64;
+        width = 22;
+        height = 15;
     }
 
     public void MoveRight()
@@ -20,7 +20,7 @@
         x -= xSpeed;
     }
 
-    public void MoveTop()
+    public void MoveUp()
     {
         y -= ySpeed;
     }

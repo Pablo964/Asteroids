@@ -3,7 +3,7 @@
     protected Image stars1, stars2;
 
     protected int mapHeight = 11, mapWidth = 16;
-    protected int tileWidth = 59, tileHeight = 58;
+    protected int tileWidth = 59, tileHeight = 52;
     protected int leftMargin = 100, topMargin = 50;
 
     protected string[] levelData =
@@ -44,4 +44,30 @@
             }
         }
     }
+
+    public bool CanMoveTo(int x1, int y1, int x2, int y2)
+    {
+        for (int column = 0; column < mapWidth; column++)
+        {
+            for (int row = 0; row < mapHeight; row++)
+            {
+                char tile = levelData[row][column];
+                if (tile != ' ')  // Space means a tile can be crossed
+                {
+                    int x1tile = leftMargin + column * tileWidth;
+                    int y1tile = topMargin + row * tileHeight;
+                    int x2tile = x1tile + tileWidth;
+                    int y2tile = y1tile + tileHeight;
+                    if ((x1tile < x2) &&
+                        (x2tile > x1) &&
+                        (y1tile < y2) &&
+                        (y2tile > y1) // Collision as bouncing boxes
+                        )
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
