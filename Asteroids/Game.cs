@@ -81,33 +81,37 @@ class Game
     {
         if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
         {
-            if (room.CanMoveTo(player.GetX() + player.GetSpeedX(),
+            player.MoveRight();
+            /*if (room.CanMoveTo(player.GetX() + player.GetSpeedX(),
                     player.GetY(),
                     player.GetX() + player.GetWidth() + player.GetSpeedX(),
                     player.GetY() + player.GetHeight()))
-                player.MoveRight();
+                player.MoveRight();*/
         }    
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
-            if (room.CanMoveTo(player.GetX() - player.GetSpeedX(),
-                    player.GetY(),
-                    player.GetX() + player.GetWidth() - player.GetSpeedX(),
-                    player.GetY() + player.GetHeight()))
-                player.MoveLeft();
+            player.MoveLeft();
+        /*if (room.CanMoveTo(player.GetX() - player.GetSpeedX(),
+                player.GetY(),
+                player.GetX() + player.GetWidth() - player.GetSpeedX(),
+                player.GetY() + player.GetHeight()))
+            player.MoveLeft();*/
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_UP))
-            if (room.CanMoveTo(player.GetX(),
-                    player.GetY() - player.GetSpeedY(),
-                    player.GetX() + player.GetWidth(),
-                    player.GetY() + player.GetHeight() - player.GetSpeedY()))
-                player.MoveUp();
+            player.MoveUp();
+        /*if (room.CanMoveTo(player.GetX(),
+                player.GetY() - player.GetSpeedY(),
+                player.GetX() + player.GetWidth(),
+                player.GetY() + player.GetHeight() - player.GetSpeedY()))
+            player.MoveUp();*/
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_DOWN))
-            if (room.CanMoveTo(player.GetX(),
-                    player.GetY() + player.GetSpeedY(),
-                    player.GetX() + player.GetWidth(),
-                    player.GetY() + player.GetHeight() + player.GetSpeedY()))
-                player.MoveDown();
+            player.MoveDown();
+        /*if (room.CanMoveTo(player.GetX(),
+                player.GetY() + player.GetSpeedY(),
+                player.GetX() + player.GetWidth(),
+                player.GetY() + player.GetHeight() + player.GetSpeedY()))
+            player.MoveDown();*/
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
             finished = true;
