@@ -2,28 +2,32 @@
 {
     protected Image stars1, stars2;
 
-    protected int mapHeight = 11, mapWidth = 16;
-    protected int tileWidth = 59, tileHeight = 52;
-    protected int leftMargin = 100, topMargin = 50;
-
+    protected int mapHeight = 14, mapWidth = 35;
+    protected int tileWidth = 20, tileHeight = 20;
+    protected int leftMargin = 0, topMargin = 0;
+    
+    //aumentar array
     protected string[] levelData =
     {
-        "                ",
-        "                ",
-        "   1     2      ",
-        "                ",
-        "       1         ",
-        "             2   ",
-        "                ",
-        "          2     ",
-        "    2           ",
-        "         2      ",
-        "AABAAAABBABAAABAA"};
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                   2                   ",
+        "                                       ",
+        "          2                         2  ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "        nn                             ",
+        "                                       ",
+        "                                 1     ",
+        "                                       "};
 
     public Room()
     {
-        stars1 = new Image("data/estrellas3.jpg");
-        stars2 = new Image("data/estrellas4.jpg");
+        stars1 = new Image("data/estrellas3.png");
+        stars2 = new Image("data/estrellas4.png");
         
     }
 
@@ -45,7 +49,7 @@
         }
     }
 
-    public bool CanMoveTo(int x1, int y1, int x2, int y2)
+   /* public bool CanMoveTo(int x1, int y1, int x2, int y2)
     {
         for (int column = 0; column < mapWidth; column++)
         {
@@ -68,6 +72,6 @@
             }
         }
         return true;
-    }
+    }*/
 
 }

@@ -1,11 +1,9 @@
 ﻿/**
- * Game.cs - Nodes Of Yesod, game logic
+ * Game.cs - Asteroids
  * 
  * Changes:
- * 0.03, 14-01-2019: Main & Hardware init moved to NodeOfYesod
- * 0.02, 29-11-2018: Split into functions
- * 0.01, 01-nov-2014: Initial version, drawing player 2, enemies, 
- *   allowing the user to move to the right
+ * Acceleration
+ * Rotation player
  */
 
 using System;
@@ -25,6 +23,14 @@ class Game
     static bool finished;
 
     protected Font font18;
+
+    //NEW
+    const int SIZE = 4;
+    protected string[] imagesPlayer;
+    public static int position = 0;
+    protected int acceleration;
+    protected int coolDown;
+    //-----
 
     public Game()
     {
@@ -60,9 +66,19 @@ class Game
             font18);
 
         room = new Room();
+
+        //NEW
+        imagesPlayer = new string[SIZE];
+        imagesPlayer[0] = "data/nave_up.png";
+        imagesPlayer[1] = "data/nave_der.png";
+        imagesPlayer[2] = "data/nave_down.png";
+        imagesPlayer[3] = "data/nave_izq.png";
+
+        coolDown = 0;
+        //-----
     }
 
-    
+
 
     void UpdateScreen()
     {
@@ -79,38 +95,81 @@ class Game
 
     void CheckUserInput()
     {
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
+        if (coolDown > 0)
         {
-            if (room.CanMoveTo(player.GetX() + player.GetSpeedX(),
-                    player.GetY(),
-                    player.GetX() + player.GetWidth() + player.GetSpeedX(),
-                    player.GetY() + player.GetHeight()))
-                player.MoveRight();
-        }    
-
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
-            if (room.CanMoveTo(player.GetX() - player.GetSpeedX(),
-                    player.GetY(),
-                    player.GetX() + player.GetWidth() - player.GetSpeedX(),
-                    player.GetY() + player.GetHeight()))
-                player.MoveLeft();
-
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_UP))
-            if (room.CanMoveTo(player.GetX(),
-                    player.GetY() - player.GetSpeedY(),
-                    player.GetX() + player.GetWidth(),
-                    player.GetY() + player.GetHeight() - player.GetSpeedY()))
-                player.MoveUp();
-
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_DOWN))
-            if (room.CanMoveTo(player.GetX(),
-                    player.GetY() + player.GetSpeedY(),
-                    player.GetX() + player.GetWidth(),
-                    player.GetY() + player.GetHeight() + player.GetSpeedY()))
-                player.MoveDown();
+            coolDown--;
+        }
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
             finished = true;
+
+
+        player.Reduce();
+
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_SPC))
+        {
+
+            if (position == 2)
+            {
+                player.IncSpeedY(8);
+            }
+
+            else if (position == 0)
+            {
+                player.IncSpeedY(-10);
+            }
+            else if (position == 3)
+            {
+                player.IncSpeedX(-10);
+            }
+            else if (position == 1)
+            {
+                player.IncSpeedX(10);
+            }
+        }
+
+        player.Move();
+
+        if (coolDown > 0)
+        {
+            return;
+        }
+
+        //NEW
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
+        {
+            position++;
+            if (position < 0)
+            {
+                position = SIZE - 1;
+            }
+            else if (position > (SIZE - 1))
+            {
+                position = 0;
+            }
+            player.LoadImage(imagesPlayer[position]);
+
+            coolDown = 5;
+
+        }
+        //NEW
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
+        {
+
+            position--;
+            if (position < 0)
+            {
+                position = SIZE - 1;
+            }
+            else if (position > (SIZE - 1))
+            {
+                position--;
+            }
+            player.LoadImage(imagesPlayer[position]);
+
+            coolDown = 5;
+        }
+        //NEW
     }
 
     static void UpdateWorld()
