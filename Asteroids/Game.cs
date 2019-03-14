@@ -138,6 +138,7 @@ class Game
         //NEW
         if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
         {
+<<<<<<< HEAD
             position++;
             if (position < 0)
             {
@@ -150,11 +151,45 @@ class Game
             player.LoadImage(imagesPlayer[position]);
 
             coolDown = 5;
+=======
+            player.MoveRight();
+            /*if (room.CanMoveTo(player.GetX() + player.GetSpeedX(),
+                    player.GetY(),
+                    player.GetX() + player.GetWidth() + player.GetSpeedX(),
+                    player.GetY() + player.GetHeight()))
+                player.MoveRight();*/
+        }    
+>>>>>>> master
 
         }
         //NEW
         if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
+<<<<<<< HEAD
         {
+=======
+            player.MoveLeft();
+        /*if (room.CanMoveTo(player.GetX() - player.GetSpeedX(),
+                player.GetY(),
+                player.GetX() + player.GetWidth() - player.GetSpeedX(),
+                player.GetY() + player.GetHeight()))
+            player.MoveLeft();*/
+
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_UP))
+            player.MoveUp();
+        /*if (room.CanMoveTo(player.GetX(),
+                player.GetY() - player.GetSpeedY(),
+                player.GetX() + player.GetWidth(),
+                player.GetY() + player.GetHeight() - player.GetSpeedY()))
+            player.MoveUp();*/
+
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_DOWN))
+            player.MoveDown();
+        /*if (room.CanMoveTo(player.GetX(),
+                player.GetY() + player.GetSpeedY(),
+                player.GetX() + player.GetWidth(),
+                player.GetY() + player.GetHeight() + player.GetSpeedY()))
+            player.MoveDown();*/
+>>>>>>> master
 
             position--;
             if (position < 0)

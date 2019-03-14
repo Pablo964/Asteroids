@@ -4,6 +4,7 @@
 
     protected int mapHeight = 14, mapWidth = 35;
     protected int tileWidth = 20, tileHeight = 20;
+<<<<<<< HEAD
     protected int leftMargin = 0, topMargin = 0;
     
     //aumentar array
@@ -22,6 +23,25 @@
         "        nn                             ",
         "                                       ",
         "                                 1     ",
+=======
+    protected int leftMargin = 60, topMargin = 190;
+
+    protected string[] levelData =
+    {
+        "      1                                 ",
+        "                                       ",
+        "         1                              ",
+        "                                       ",
+        "                                        ",
+        "           2                             ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "        2                             ",
+        "                                       ",
+        "                                 1      ",
+>>>>>>> master
         "                                       "};
 
     public Room()
