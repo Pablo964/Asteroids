@@ -3,45 +3,25 @@
     protected Image stars1, stars2;
 
     protected int mapHeight = 14, mapWidth = 35;
-    protected int tileWidth = 20, tileHeight = 20;
-<<<<<<< HEAD
+    protected int tileWidth = 51, tileHeight = 38;
     protected int leftMargin = 0, topMargin = 0;
     
     //aumentar array
     protected string[] levelData =
     {
+        "      1                                ",
+        "                                       ",
+        "         1                             ",
+        "                                       ",
+        "                                       ",
+        "           2                           ",
         "                                       ",
         "                                       ",
         "                                       ",
-        "                   2                   ",
         "                                       ",
-        "          2                         2  ",
-        "                                       ",
-        "                                       ",
-        "                                       ",
-        "                                       ",
-        "        nn                             ",
+        "        2                              ",
         "                                       ",
         "                                 1     ",
-=======
-    protected int leftMargin = 60, topMargin = 190;
-
-    protected string[] levelData =
-    {
-        "      1                                 ",
-        "                                       ",
-        "         1                              ",
-        "                                       ",
-        "                                        ",
-        "           2                             ",
-        "                                       ",
-        "                                       ",
-        "                                       ",
-        "                                       ",
-        "        2                             ",
-        "                                       ",
-        "                                 1      ",
->>>>>>> master
         "                                       "};
 
     public Room()
