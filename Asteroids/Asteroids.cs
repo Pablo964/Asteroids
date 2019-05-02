@@ -3,7 +3,7 @@
     static void Main()
     {
         bool fullScreen = false;
-        SdlHardware.Init(1024, 768, 24, fullScreen);
+        SdlHardware.Init(1024, 700, 24, fullScreen);
 
         WelcomeScreen w = new WelcomeScreen();
 
@@ -14,6 +14,12 @@
             {
                 Game g = new Game();
                 g.Run();
+                /*Score s = new Score();
+                do
+                {
+                    s.Run();
+                } while (s.GetExit() != 0);*/
+               
             }
             else if (w.GetChosenOption() == 2)
             {
