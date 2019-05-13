@@ -21,7 +21,7 @@ class Game
     protected int coolDownShot;
     protected int numTeletransportes;
     protected int enfriamientoTeletransporte;
-    
+
     static Enemy[] enemies;
     //NEW
     const int SIZE = 16;
@@ -42,17 +42,24 @@ class Game
     StreamWriter outputMaxScore;
     Score s;
     static protected string fileMaxScore = "maxScore.txt";
+    static protected Font font24;
+
+    protected bool levelUp;
+    static protected int maxEnemies;
+    protected int maxVelocidad;
+    protected int level;
 
     public Game()
     {
+        maxEnemies = 20;
         player = new Player();
         player.MoveTo(200, 100);
         shot = new List<Shot>();
         shot.Add(new Shot());
         numEnemies = 2;
-        enemies = new Enemy[numEnemies];
+        enemies = new Enemy[maxEnemies];
         //---
-        enemyAlive = new bool[numEnemies];
+        enemyAlive = new bool[maxEnemies];
 
 
         for (int i = 0; i < numEnemies; i++)
@@ -77,12 +84,6 @@ class Game
         }
 
         Font font18 = new Font("data/Joystix.ttf", 18);
-
-
-        SdlHardware.WriteHiddenText("Score: ",
-            40, 10,
-            0xCC, 0xCC, 0xCC,
-            font18);
 
         room = new Room();
         //NEW
@@ -117,17 +118,17 @@ class Game
         //-----
         score = 0;
         s = new Score();
+        font24 = new Font("data/Joystix.ttf", 24);
 
-        //outputMaxScore = new StreamWriter(fileMaxScore);
-        //outputMaxScore.Close();
         if (File.Exists(fileMaxScore))
         {
             inputMaxScore = new StreamReader(fileMaxScore);
         }
-        
+
+        levelUp = true;
+        maxVelocidad = 5;
+        level = 1;
     }
-
-
 
     void UpdateScreen()
     {
@@ -149,7 +150,70 @@ class Game
                 enemies[i].DrawOnHiddenScreen();
             }
         }
+
+        for (int i = 0; i < numEnemies; i++)
+        {
+            if (enemyAlive[i] == true)
+            {
+                levelUp = false;
+            }
+        }
+
+        if (levelUp == true)
+        {
+            level += 1;
+            if (numEnemies < 20)
+            {
+                numEnemies += 2;
+            }
+            if (maxVelocidad < 35)
+            {
+                maxVelocidad += 2;
+            }
+
+            for (int i = 0; i < numEnemies; i++)
+            {
+                enemies[i] = new Enemy();
+            }
+
+            finished = false;
+
+            Random rnd = new Random();
+
+            for (int i = 0; i < numEnemies; i++)
+            {
+                int randomX = rnd.Next(200, 800);
+                int randomY = rnd.Next(50, 600);
+
+                if (randomX > player.GetX() || randomX < player.GetX() ||
+                        randomY > player.GetY() || randomY < player.GetY())
+                {
+                    enemies[i].MoveTo(randomX, randomY);
+                }
+                enemies[i].SetSpeed(rnd.Next(1, maxVelocidad),
+                    rnd.Next(1, maxVelocidad));
+            }
+
+            for (int i = 0; i < numEnemies; i++)
+            {
+                enemyAlive[i] = true;
+            }
+        }
+
+        SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["level"] + " "
+                + level,
+            400, 10,
+            0xC0, 0xC0, 0xC0,
+            font24);
+        SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["score"] + " "
+                + score,
+            400, 40,
+            0xC0, 0xC0, 0xC0,
+            font24);
+
         SdlHardware.ShowHiddenScreen();
+
+        levelUp = true;
     }
 
 
@@ -200,7 +264,7 @@ class Game
 
                     case 1:
                         //TOCADO
-                        shot[0].speedY(((-shotSpeed) ) / 2);
+                        shot[0].speedY(((-shotSpeed)) / 2);
                         shot[0].speedX((shotSpeed) / 2);
                         break;
 
@@ -445,13 +509,12 @@ class Game
 
     static void CheckGameStatus()
     {
-        // Check collisions and apply game logic
         for (int i = 0; i < numEnemies; i++)
         {
             if (player.CollisionsWith(enemies[i]) && enemyAlive[i] == true)
             {
                 string line = inputMaxScore.ReadLine();
-                
+
                 maxScore = Convert.ToInt32(line);
                 inputMaxScore.Close();
 
@@ -459,14 +522,17 @@ class Game
                 {
                     maxScore = score;
                     File.WriteAllText(fileMaxScore, Convert.ToString(score));
-                    
+
                 }
                 Score.Run(score, maxScore);
                 score = 0;
                 finished = true;
-            }   
 
-            if (shot[0].CollisionsWith(enemies[i]) && enemyAlive[i] == true)
+            }
+
+            if ((shot[0].CollisionsWith(enemies[i]) || shot[0].CollisionsWith(enemies[i]))
+                    && enemyAlive[i] == true
+                && activeShot == true)
             {
                 enemyAlive[i] = false;
                 score += 20;

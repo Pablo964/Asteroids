@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Asteroids.cs" />
+    <Compile Include="ChooseLenguage.cs" />
     <Compile Include="CreditsScreen.cs" />
     <Compile Include="EndEscene.cs" />
     <Compile Include="Enemy.cs" />
@@ -67,6 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="docs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
