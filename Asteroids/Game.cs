@@ -333,11 +333,11 @@ class Game
 
             }
 
-            Console.WriteLine("total " + enemies.Count);
 
             if ((shot[0].CollisionsWith(enemies[i])
                     && enemyAlive[i] == true
-                    && activeShot == true))
+                    && activeShot == true)
+                    && enemies[i].TypeEnemy() != "smallAsteroid")
             { 
                 enemyAlive[i] = false;
                 activeShot = false;
@@ -345,11 +345,15 @@ class Game
 
                 for (int j = 0; j < 2; j++)
                 {
-                    enemies.Add(new Enemy());
-
-                    Console.WriteLine("total2 " + enemies.Count);
-                    Console.WriteLine("j:" + j);
-
+                    if (enemies[i].TypeEnemy() == "bigAsteroid")
+                    {
+                        enemies.Add(new MediumAsteroid());
+                    }
+                    else
+                    {
+                        enemies.Add(new SmallAsteroid());
+                    }
+                    
                     enemies.Last().MoveTo(enemies[i].GetX(),
                             enemies[i].GetY());
 
@@ -359,8 +363,16 @@ class Game
                     enemyAlive.Add(true);
                     enemies[j].DrawOnHiddenScreen();
                 }
-                numEnemies += 2;
+                
                 score += 20;
+            }
+            else if (shot[0].CollisionsWith(enemies[i])
+                    && enemyAlive[i] == true
+                    && activeShot == true
+                    && enemies[i].TypeEnemy() == "smallAsteroid")
+            {
+                enemyAlive[i] = false;
+                activeShot = false;
             }
         }
     }

@@ -3,16 +3,16 @@ using System;
 
 class Enemy : Sprite
 {
-    private static Random rnd = new Random();
+    protected static Random rnd = new Random();
 
-    private int negativeX;
-    private int negativeY;
+    protected int negativeX;
+    protected int negativeY;
 
     public Enemy()
     {
         LoadImage("data/enemy.png");
-        width = 32;
-        height = 64;
+        width = 74;
+        height = 63;
         xSpeed = rnd.Next(0, 9);
         ySpeed = rnd.Next(0, 9);
         negativeX = rnd.Next(0, 2);
@@ -37,6 +37,11 @@ class Enemy : Sprite
         {
             y += ySpeed;
         }
+    }
+
+    public virtual string TypeEnemy()
+    {
+        return "bigAsteroid";
     }
 }
 
