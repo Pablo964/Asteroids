@@ -19,6 +19,25 @@ class Shot : Sprite
         shotSpeed = 45;
     }
 
+    public static void Shoot(Player player, ref int coolDownShot, 
+            int positionShot, ref int positionSprite, ref bool activeShot)
+    {
+        for (int i = 0; i < Game.shot.Count - 2; i++)
+        {
+            Game.shot.Remove(Game.shot[i]);
+        }
+        Game.shot.Add(new Shot());
+        Game.shot.Add(new Shot());
+
+        Game.shot[positionShot].MoveTo(player.GetX() + 12, player.GetY() + 16);
+        Game.shot[positionShot].LoadImage(Game.GetImageShot());
+
+        coolDownShot = 30;
+        activeShot = true;
+
+        Game.shot[positionShot].ShotDirection(positionSprite);
+    }
+
     public void ShotDirection(int position)
     {
         switch (position)

@@ -56,6 +56,11 @@ class ChooseLanguage
            0xC0, 0xC0, 0xC0,
             font24);
 
+        SdlHardware.WriteHiddenText("PRESS SPACE TO SELECT",
+            350, 600,
+           0xC0, 0xC0, 0xC0,
+            font24);
+
         SdlHardware.ShowHiddenScreen();
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_DOWN) && pointerY < 400)
@@ -88,6 +93,7 @@ class ChooseLanguage
                     lenguage.Add("maxScore", "Máxima puntuación:");
                     lenguage.Add("level", "Nivel:");
                     lenguage.Add("toReturn", "Para volver");
+                    lenguage.Add("press2", "p2 pulsa 2");
                     break;
                 case 300:
                     option = 2;
@@ -98,6 +104,7 @@ class ChooseLanguage
                     lenguage.Add("maxScore", "Max score:");
                     lenguage.Add("level", "Level:");
                     lenguage.Add("toReturn", "To return");
+                    lenguage.Add("press2", "p2 press 2");
                     break;
 
                 case 400:
@@ -109,6 +116,7 @@ class ChooseLanguage
                     lenguage.Add("maxScore", "note maximale:");
                     lenguage.Add("level", "niveau:");
                     lenguage.Add("toReturn", "pour revenir");
+                    lenguage.Add("press2", "p2 appuyer sur 2");
                     break;
             }
             shotX = 500;
