@@ -8,7 +8,7 @@ class Game
 
     public static Player player;
     public static Player player2;
-    private bool player2Active;
+    protected bool player2Active;
     public static List<Shot> shot;
     public static int numEnemies;
     protected int coolDownChangeSprite;
@@ -39,13 +39,13 @@ class Game
 
     protected Room room;
 
-    static bool finished;
-    static protected int score;
-    static protected int maxScore;
-    static StreamReader inputMaxScore;
+    public static bool finished;
+    public static int score;
+    public static int maxScore;
+    public static StreamReader inputMaxScore;
 
     Score s;
-    static protected string fileMaxScore = "maxScore.txt";
+    public static string fileMaxScore = "maxScore.txt";
     static protected Font font24;
 
     protected bool levelUp;
@@ -83,14 +83,14 @@ class Game
                 rnd.Next(1, 5));
         }
 
-        
+
         for (int i = 0; i < enemies.Count; i++)
         {
             enemyAlive.Add(true);
         }
 
 
-        
+
         Font font18 = new Font("data/Joystix.ttf", 18);
 
         room = new Room();
@@ -150,7 +150,8 @@ class Game
 
     }
 
-    public static string GetImageShot(){ return imageShot; }
+    public static string GetImageShot() { return imageShot; }
+    public static StreamReader GetInputMaxScore() { return inputMaxScore; }
 
     void UpdateScreen()
     {
@@ -198,7 +199,7 @@ class Game
                 enemies.Remove(enemies[i]);
                 enemyAlive.Remove(enemyAlive[i]);
             }
-            
+
 
             room.NewLevel(ref maxVelocidad, ref finished, ref player);
         }
@@ -282,27 +283,27 @@ class Game
         if (!(coolDownShot > 0))
         {
 
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_X))
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_I))
             {
-                Shot.Shoot(player, ref coolDownShot, 0, ref position, 
+                Shot.Shoot(player, ref coolDownShot, 0, ref position,
                     ref activeShot);
             }
         }
         if (!(coolDownShot2 > 0))
         {
-            
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_M) && player2Active)
+
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_N) && player2Active)
             {
-                
-                Shot.Shoot(player2, ref coolDownShot2, 1, ref position2, 
+
+                Shot.Shoot(player2, ref coolDownShot2, 1, ref position2,
                         ref activeShot2);
             }
         }
         player.Reduce();
 
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_Z))
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_O))
         {
-            player.ChangeVelocity(position);
+            player.ChangeVelocity(position, ref player);
         }
 
         player.Move();
@@ -319,7 +320,7 @@ class Game
         }
 
 
-        //NEW
+        //PLAYER 1
         if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
         {
             position++;
@@ -339,7 +340,7 @@ class Game
         //NEW
         if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
         {
-
+            Console.WriteLine(position);
             position--;
             if (position < 0)
             {
@@ -358,7 +359,7 @@ class Game
             return;
         }
         //NEW
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_C))
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_P))
         {
             if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
             {
@@ -368,6 +369,79 @@ class Game
             }
         }
 
+        //PLAYER 2
+        if (player2Active)
+        {
+            player2.Reduce();
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_B))
+            {
+                player2.ChangeVelocity(position2, ref player2);
+            }
+
+            player2.Move();
+            if (shot.Count > 1)
+            {
+                shot[1].Move(position2);
+            }
+            
+
+            if (coolDownChangeSprite2 > 0)
+            {
+                return;
+            }
+
+
+
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_E))
+            {
+                position2++;
+                if (position2 < 0)
+                {
+                    position2 = SIZE - 1;
+                }
+                else if (position2 > (SIZE - 1))
+                {
+                    position2 = 0;
+                }
+                player2.LoadImage(imagesPlayer[position2]);
+
+                coolDownChangeSprite2 = 10;
+
+            }
+            
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_Q))
+            {
+
+                position2--;
+                if (position2 < 0)
+                {
+                    position2 = SIZE - 1;
+                }
+                else if (position2 > (SIZE - 1))
+                {
+                    position2--;
+                }
+                player2.LoadImage(imagesPlayer[position2]);
+
+                coolDownChangeSprite2 = 10;
+            }
+            if (enfriamientoTeletransporte2 > 0)
+            {
+                return;
+            }
+            //NEW
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_M))
+            {
+                if (!(enfriamientoTeletransporte2 > 0) 
+                        && numTeletransportes2 > 0)
+                {
+                    player2.Teletransporte();
+                    enfriamientoTeletransporte2 = 70;
+                    numTeletransportes2--;
+                }
+            }
+        }
+        
     }
 
     static void UpdateWorld()
@@ -380,74 +454,27 @@ class Game
         }
 
         player.InfiniteScreen();
-        shot[0].InfiniteScreen();
+        foreach (Shot s in shot)
+        {
+            s.InfiniteScreen();
+        }
+        
     }
 
-    static void CheckGameStatus()
+
+    public  void CheckGameStatus()
     {
-        for (int i = 0; i < enemies.Count; i++)
+        Shot.CollisionShot(0, ref activeShot);
+        Player.CollisionPlayer(ref player);
+
+        if (player2Active)
         {
-            if (player.CollisionsWith(enemies[i]) && enemyAlive[i] == true)
+            if (activeShot2)
             {
-                string line = inputMaxScore.ReadLine();
-
-                maxScore = Convert.ToInt32(line);
-                inputMaxScore.Close();
-
-                if (score > maxScore)
-                {
-                    maxScore = score;
-                    File.WriteAllText(fileMaxScore, Convert.ToString(score));
-
-                }
-                Score.Run(score, maxScore);
-                score = 0;
-                finished = true;
-
+                Shot.CollisionShot(1, ref activeShot2);
             }
-
-
-            if ((shot[0].CollisionsWith(enemies[i])
-                    && enemyAlive[i] == true
-                    && activeShot == true)
-                    && enemies[i].TypeEnemy() != "smallAsteroid")
-            { 
-                enemyAlive[i] = false;
-                activeShot = false;
-                Random rnd = new Random();
-
-                for (int j = 0; j < 2; j++)
-                {
-                    if (enemies[i].TypeEnemy() == "bigAsteroid")
-                    {
-                        enemies.Add(new MediumAsteroid());
-                    }
-                    else
-                    {
-                        enemies.Add(new SmallAsteroid());
-                    }
-                    
-                    enemies.Last().MoveTo(enemies[i].GetX(),
-                            enemies[i].GetY());
-
-                    enemies.Last().SetSpeed(rnd.Next(1, 5),
-                        rnd.Next(1, 5));
-
-                    enemyAlive.Add(true);
-                    enemies[j].DrawOnHiddenScreen();
-                }
-                
-                score += 20;
-            }
-            else if (shot[0].CollisionsWith(enemies[i])
-                    && enemyAlive[i] == true
-                    && activeShot == true
-                    && enemies[i].TypeEnemy() == "smallAsteroid")
-            {
-                enemyAlive[i] = false;
-                activeShot = false;
-            }
-        }
+            Player.CollisionPlayer(ref player2);
+        } 
     }
 
     static void PauseUntilNextFrame()

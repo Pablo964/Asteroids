@@ -51,11 +51,9 @@
     <Compile Include="Asteroids.cs" />
     <Compile Include="ChooseLenguage.cs" />
     <Compile Include="CreditsScreen.cs" />
-    <Compile Include="EndEscene.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="HelpScreen.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="MediumAsteroid.cs" />
     <Compile Include="Player.cs" />
