@@ -7,22 +7,34 @@ class Game
 {
 
     public static Player player;
+    public static Player player2;
+    private bool player2Active;
     public static List<Shot> shot;
     public static int numEnemies;
     protected int coolDownChangeSprite;
     protected int coolDownShot;
+
+    protected int coolDownChangeSprite2;
+    protected int coolDownShot2;
+
     protected int numTeletransportes;
     protected int enfriamientoTeletransporte;
+
+    protected int numTeletransportes2;
+    protected int enfriamientoTeletransporte2;
 
     public static List<Enemy> enemies;
 
     const int SIZE = 16;
     protected string[] imagesPlayer;
-    public static int position = 0;
-    protected string imageShot;
+    protected int position;
+    protected int position2;
 
-    //protected int shotSpeed;
-    protected static bool activeShot;
+    protected static string imageShot;
+
+    public static bool activeShot;
+    public static bool activeShot2;
+
     public static List<bool> enemyAlive;
 
     protected Room room;
@@ -107,10 +119,20 @@ class Game
 
         activeShot = false;
 
+        position = 0;
+        position2 = 0;
+
         coolDownChangeSprite = 0;
         coolDownShot = 0;
+
+        coolDownChangeSprite2 = 0;
+        coolDownShot2 = 0;
+
         numTeletransportes = 3;
         enfriamientoTeletransporte = 0;
+
+        numTeletransportes2 = 3;
+        enfriamientoTeletransporte2 = 0;
         //-----
         score = 0;
         s = new Score();
@@ -124,7 +146,11 @@ class Game
         levelUp = true;
         maxVelocidad = 5;
         level = 1;
+
+
     }
+
+    public static string GetImageShot(){ return imageShot; }
 
     void UpdateScreen()
     {
@@ -134,9 +160,18 @@ class Game
 
         player.DrawOnHiddenScreen();
 
+        if (player2Active)
+        {
+            player2.DrawOnHiddenScreen();
+        }
+
         if (shot.Count > 0 && activeShot == true)
         {
             shot[0].DrawOnHiddenScreen();
+        }
+        if (activeShot2)
+        {
+            shot[1].DrawOnHiddenScreen();
         }
 
         for (int i = 0; i < enemies.Count; i++)
@@ -179,6 +214,13 @@ class Game
             0xC0, 0xC0, 0xC0,
             font24);
 
+        if (!player2Active)
+        {
+            SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["press2"] + "",
+            700, 10,
+            0xC0, 0xC0, 0xC0,
+            font24);
+        }
         SdlHardware.ShowHiddenScreen();
 
         levelUp = true;
@@ -205,31 +247,57 @@ class Game
             enfriamientoTeletransporte -= 9;
         }
 
+        if (player2Active)
+        {
+            if (coolDownChangeSprite2 > 0)
+            {
+                coolDownChangeSprite2 -= 9;
+
+            }
+            if (coolDownShot2 > 0)
+            {
+                coolDownShot2 -= 2;
+            }
+            if (coolDownShot2 == 0)
+            {
+                activeShot2 = false;
+            }
+            if (enfriamientoTeletransporte2 > 0)
+            {
+                enfriamientoTeletransporte2 -= 9;
+            }
+        }
+
+
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
             finished = true;
 
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_2))
+        {
+            player2Active = true;
+            player2 = new Player();
+            player2.MoveTo(200, 200);
 
+        }
         if (!(coolDownShot > 0))
         {
 
             if (SdlHardware.KeyPressed(SdlHardware.KEY_X))
             {
-                for (int i = 0; i < shot.Count; i++)
-                {
-                    shot.Remove(shot[i]);
-                }
-                shot.Add(new Shot());
-
-                shot[0].MoveTo(player.GetX() + 12, player.GetY() + 16);
-                shot[0].LoadImage(imageShot);
-
-                coolDownShot = 30;
-                activeShot = true;
-
-                shot[0].ShotDirection(position);
+                Shot.Shoot(player, ref coolDownShot, 0, ref position, 
+                    ref activeShot);
             }
         }
-
+        if (!(coolDownShot2 > 0))
+        {
+            
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_M) && player2Active)
+            {
+                
+                Shot.Shoot(player2, ref coolDownShot2, 1, ref position2, 
+                        ref activeShot2);
+            }
+        }
         player.Reduce();
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_Z))
@@ -239,6 +307,11 @@ class Game
 
         player.Move();
         shot[0].Move(position);
+
+        if (activeShot2)
+        {
+            shot[1].Move(position);
+        }
 
         if (coolDownChangeSprite > 0)
         {
