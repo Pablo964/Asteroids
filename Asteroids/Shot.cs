@@ -16,6 +16,9 @@ class Shot : Sprite
         shotSpeed = 45;
     }
 
+    public int GetshotSpeed() { return shotSpeed; }
+    public void SetshotSpeed() { this.shotSpeed = 22; }
+
     public static void CollisionShot(int posShot, ref bool activeShot)
     {
         for (int i = 0; i < Game.enemies.Count; i++)
@@ -55,12 +58,11 @@ class Shot : Sprite
             }
             else if (Game.shot[posShot].CollisionsWith(Game.enemies[i])
                     && Game.enemyAlive[i] == true
-                    && Game.activeShot == true
+                    && activeShot == true
                     && Game.enemies[i].TypeEnemy() == "smallAsteroid")
             {
                 Game.enemyAlive[i] = false;
-                Game.activeShot = false;
-                Game.activeShot2 = false;
+                activeShot = false;
             }
         }
     }
@@ -69,19 +71,11 @@ class Shot : Sprite
     public static void Shoot(Player player, ref int coolDownShot, 
             int positionShot, ref int positionSprite, ref bool activeShot)
     {
-        for (int i = 0; i < Game.shot.Count - 2; i++)
-        {
-            Game.shot.Remove(Game.shot[i]);
-        }
-        Game.shot.Add(new Shot());
-        Game.shot.Add(new Shot());
-
         Game.shot[positionShot].MoveTo(player.GetX() + 12, player.GetY() + 16);
         Game.shot[positionShot].LoadImage(Game.GetImageShot());
 
         coolDownShot = 30;
         activeShot = true;
-
         Game.shot[positionShot].ShotDirection(positionSprite, positionShot);
     }
 

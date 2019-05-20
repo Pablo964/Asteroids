@@ -118,6 +118,7 @@ class Game
         //shotSpeed = 22;
 
         activeShot = false;
+        activeShot2 = false;
 
         position = 0;
         position2 = 0;
@@ -147,7 +148,9 @@ class Game
         maxVelocidad = 5;
         level = 1;
 
-
+        shot.Add(new Shot());
+        shot.Add(new Shot());
+        shot[1].SetshotSpeed();
     }
 
     public static string GetImageShot() { return imageShot; }
@@ -239,7 +242,7 @@ class Game
         {
             coolDownShot -= 2;
         }
-        if (coolDownShot == 0)
+        if (coolDownShot <= 0)
         {
             activeShot = false;
         }
@@ -259,7 +262,7 @@ class Game
             {
                 coolDownShot2 -= 2;
             }
-            if (coolDownShot2 == 0)
+            if (coolDownShot2 <= 0)
             {
                 activeShot2 = false;
             }
@@ -285,6 +288,7 @@ class Game
 
             if (SdlHardware.KeyPressed(SdlHardware.KEY_I))
             {
+                
                 Shot.Shoot(player, ref coolDownShot, 0, ref position,
                     ref activeShot);
             }
@@ -292,9 +296,9 @@ class Game
         if (!(coolDownShot2 > 0))
         {
 
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_N) && player2Active)
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_B) && player2Active)
             {
-
+                activeShot2 = true;
                 Shot.Shoot(player2, ref coolDownShot2, 1, ref position2,
                         ref activeShot2);
             }
@@ -337,10 +341,9 @@ class Game
             coolDownChangeSprite = 10;
 
         }
-        //NEW
+        
         if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
         {
-            Console.WriteLine(position);
             position--;
             if (position < 0)
             {
@@ -358,7 +361,7 @@ class Game
         {
             return;
         }
-        //NEW
+        
         if (SdlHardware.KeyPressed(SdlHardware.KEY_P))
         {
             if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
@@ -372,8 +375,9 @@ class Game
         //PLAYER 2
         if (player2Active)
         {
+
             player2.Reduce();
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_B))
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_N))
             {
                 player2.ChangeVelocity(position2, ref player2);
             }
@@ -444,7 +448,7 @@ class Game
         
     }
 
-    static void UpdateWorld()
+    void UpdateWorld()
     {
         // Move enemies, background, etc 
         for (int i = 0; i < enemies.Count; i++)
@@ -454,6 +458,12 @@ class Game
         }
 
         player.InfiniteScreen();
+
+        if (player2Active)
+        {
+            player2.InfiniteScreen();
+        }
+
         foreach (Shot s in shot)
         {
             s.InfiniteScreen();
@@ -493,5 +503,6 @@ class Game
             CheckGameStatus();
         }
         while (!finished);
+        inputMaxScore.Close();
     }
 }

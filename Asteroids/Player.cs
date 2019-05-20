@@ -26,7 +26,7 @@ class Player : Sprite
                 string line = Game.inputMaxScore.ReadLine();
 
                 Game.maxScore = Convert.ToInt32(line);
-                Game.inputMaxScore.Close();
+                
 
                 if (Game.score > Game.maxScore)
                 {
@@ -40,6 +40,8 @@ class Player : Sprite
                 Game.finished = true;
                 Game.activeShot = false;
                 Game.activeShot2 = false;
+                
+                return;
             }
         }
     }
