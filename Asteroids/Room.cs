@@ -1,4 +1,6 @@
-﻿class Room
+﻿using System;
+
+class Room
 {
     protected Image stars1, stars2;
 
@@ -49,29 +51,48 @@
         }
     }
 
-   /* public bool CanMoveTo(int x1, int y1, int x2, int y2)
+    public void NewLevel(ref int maxVelocidad, ref bool finished, 
+            ref Player player)
     {
-        for (int column = 0; column < mapWidth; column++)
+        Game.level += 1;
+        if (Game.numEnemies < 20)
         {
-            for (int row = 0; row < mapHeight; row++)
-            {
-                char tile = levelData[row][column];
-                if (tile != ' ')  // Space means a tile can be crossed
-                {
-                    int x1tile = leftMargin + column * tileWidth;
-                    int y1tile = topMargin + row * tileHeight;
-                    int x2tile = x1tile + tileWidth;
-                    int y2tile = y1tile + tileHeight;
-                    if ((x1tile < x2) &&
-                        (x2tile > x1) &&
-                        (y1tile < y2) &&
-                        (y2tile > y1) // Collision as bouncing boxes
-                        )
-                        return false;
-                }
-            }
+            Game.numEnemies += 2;
         }
-        return true;
-    }*/
+        if (maxVelocidad < 35)
+        {
+            maxVelocidad += 2;
+        }
+
+
+        for (int i = 0; i < Game.numEnemies; i++)
+        {
+            Game.enemies.Add(new Enemy());
+        }
+
+        finished = false;
+
+        Random rnd = new Random();
+
+        for (int i = 0; i < Game.enemies.Count; i++)
+        {
+            int randomX = rnd.Next(200, 800);
+            int randomY = rnd.Next(50, 600);
+
+            if (randomX > player.GetX() || randomX < player.GetX() ||
+                    randomY > player.GetY() || randomY < player.GetY())
+            {
+                Game.enemies[i].MoveTo(randomX, randomY);
+            }
+            Game.enemies[i].SetSpeed(rnd.Next(1, maxVelocidad),
+                rnd.Next(1, maxVelocidad));
+        }
+
+        for (int i = 0; i < Game.numEnemies; i++)
+        {
+            Game.enemyAlive.Add(true);
+        }
+    }
+   
 
 }

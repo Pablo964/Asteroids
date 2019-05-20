@@ -49,22 +49,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Asteroids.cs" />
+    <Compile Include="ChooseLenguage.cs" />
     <Compile Include="CreditsScreen.cs" />
-    <Compile Include="EndEscene.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="HelpScreen.cs" />
     <Compile Include="Image.cs" />
+    <Compile Include="MediumAsteroid.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="Score.cs" />
     <Compile Include="SdlHardware.cs" />
+    <Compile Include="Shot.cs" />
+    <Compile Include="SmallAsteroid.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="WelcomeScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="docs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

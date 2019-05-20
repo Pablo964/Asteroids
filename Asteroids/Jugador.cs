@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 class Player : Sprite
 {
@@ -17,113 +16,84 @@ class Player : Sprite
         coolDown = 0;
     }
 
-    public static void CollisionPlayer(ref Player player)
-    {
-        for (int i = 0; i < Game.enemies.Count; i++)
-        {
-            if (player.CollisionsWith(Game.enemies[i]) && Game.enemyAlive[i] == true)
-            {
-                string line = Game.inputMaxScore.ReadLine();
-
-                Game.maxScore = Convert.ToInt32(line);
-                
-
-                if (Game.score > Game.maxScore)
-                {
-                    Game.maxScore = Game.score;
-                    File.WriteAllText(Game.fileMaxScore,
-                            Convert.ToString(Game.score));
-
-                }
-                Score.Run(Game.score, Game.maxScore);
-                Game.score = 0;
-                Game.finished = true;
-                Game.activeShot = false;
-                Game.activeShot2 = false;
-                
-                return;
-            }
-        }
-    }
-
-    public void ChangeVelocity(int positionSprite, ref Player player)
+    public void ChangeVelocity(int positionSprite)
     {
         switch (positionSprite)
         {
             case 0:
-                player.IncSpeedY(-2);
+                Game.player.IncSpeedY(-2);
                 break;
 
             case 1:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(6 / 2);
+                Game.player.IncSpeedY(-6 / 2);
+                Game.player.IncSpeedX(6 / 2);
                 break;
 
             case 2:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(6 / 2);
+                Game.player.IncSpeedY(-6 / 2);
+                Game.player.IncSpeedX(6 / 2);
                 break;
 
             case 3:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(6 / 2);
+                Game.player.IncSpeedY(-6 / 2);
+                Game.player.IncSpeedX(6 / 2);
                 break;
 
             case 4:
-                player.IncSpeedX(6);
+                Game.player.IncSpeedX(6);
                 break;
 
             case 5:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(6 / 2);
+                Game.player.IncSpeedY(6 / 2);
+                Game.player.IncSpeedX(6 / 2);
                 break;
 
             case 6:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(6 / 2);
+                Game.player.IncSpeedY(6 / 2);
+                Game.player.IncSpeedX(6 / 2);
                 break;
 
             case 7:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(6 / 2);
+                Game.player.IncSpeedY(6 / 2);
+                Game.player.IncSpeedX(6 / 2);
                 break;
 
             case 8:
-                player.IncSpeedY(6);
+                Game.player.IncSpeedY(6);
                 break;
 
             case 9:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(-6 / 2);
+                Game.player.IncSpeedY(6 / 2);
+                Game.player.IncSpeedX(-6 / 2);
                 break;
 
             case 10:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(-6 / 2);
+                Game.player.IncSpeedY(6 / 2);
+                Game.player.IncSpeedX(-6 / 2);
                 break;
 
             case 11:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(-6 / 2);
+                Game.player.IncSpeedY(6 / 2);
+                Game.player.IncSpeedX(-6 / 2);
                 break;
 
             case 12:
-                player.IncSpeedX(-6);
+                Game.player.IncSpeedX(-6);
                 break;
 
             case 13:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(-6 / 2);
+                Game.player.IncSpeedY(-6 / 2);
+                Game.player.IncSpeedX(-6 / 2);
                 break;
 
             case 14:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(-6 / 2);
+                Game.player.IncSpeedY(-6 / 2);
+                Game.player.IncSpeedX(-6 / 2);
                 break;
 
             case 15:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(-6 / 2);
+                Game.player.IncSpeedY(-6 / 2);
+                Game.player.IncSpeedX(-6 / 2);
                 break;
         }
     }
