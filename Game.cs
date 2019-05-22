@@ -1,53 +1,64 @@
-﻿/**
- * Game.cs - Nodes Of Yesod, game logic
- * 
- * Changes:
- * 0.03, 14-01-2019: Main & Hardware init moved to NodeOfYesod
- * 0.02, 29-11-2018: Split into functions
- * 0.01, 01-nov-2014: Initial version, drawing player 2, enemies, 
- *   allowing the user to move to the right
+﻿/*
+ * all variables with suffix 1 belong to player 1, 
+ * and those with suffix 2 belong to player 2
  */
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 class Game
 {
 
-    static Player player;
-    static List<Shot> shot;
-    static int numEnemies;
-    protected int coolDown;
+    public static Player player;
+    public static Player player2;
+    public static bool player2Active;
+    public static List<Shot> shot;
+    public static int numEnemies;
+    protected int coolDownChangeSprite;
     protected int coolDownShot;
+
+    protected int coolDownChangeSprite2;
+    protected int coolDownShot2;
+
     protected int numTeletransportes;
     protected int enfriamientoTeletransporte;
 
-    static Enemy[] enemies;
-    //NEW
+    protected int numTeletransportes2;
+    protected int enfriamientoTeletransporte2;
+
+    public static List<Enemy> enemies;
+
     const int SIZE = 16;
     protected string[] imagesPlayer;
-    public static int position = 0;
-    protected string imageShot;
+    protected int position;
+    protected int position2;
 
-    protected int shotSpeed;
-    protected static bool activeShot;
-    static bool[] enemyAlive;
-    //-----
+    protected static string imageShot;
+
+    public static bool activeShot;
+    public static bool activeShot2;
+
+    public static List<bool> enemyAlive;
+
     protected Room room;
 
-    static bool finished;
-    static protected int score;
-    static protected int maxScore;
-    static StreamReader inputMaxScore;
-    StreamWriter outputMaxScore;
+    public static bool finished;
+    public static int score;
+    public static int maxScore;
+    public static StreamReader inputMaxScore;
+
     Score s;
-    static protected string fileMaxScore = "maxScore.txt";
+    public static string fileMaxScore = "maxScore.txt";
     static protected Font font24;
 
     protected bool levelUp;
     static protected int maxEnemies;
     protected int maxVelocidad;
-    protected int level;
+    public static int level;
+
+    private Image imageArrowP1;
+    private Image imageArrowP2;
 
     public Game()
     {
@@ -57,20 +68,21 @@ class Game
         shot = new List<Shot>();
         shot.Add(new Shot());
         numEnemies = 2;
-        enemies = new Enemy[maxEnemies];
+        enemies = new List<Enemy>();
         //---
-        enemyAlive = new bool[maxEnemies];
+        enemyAlive = new List<bool>();
 
 
         for (int i = 0; i < numEnemies; i++)
         {
-            enemies[i] = new Enemy();
+            enemies.Add(new Enemy());
         }
+
 
         finished = false;
 
         Random rnd = new Random();
-        for (int i = 0; i < numEnemies; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].MoveTo(rnd.Next(200, 800),
                 rnd.Next(50, 600));
@@ -78,10 +90,13 @@ class Game
                 rnd.Next(1, 5));
         }
 
-        for (int i = 0; i < numEnemies; i++)
+
+        for (int i = 0; i < enemies.Count; i++)
         {
-            enemyAlive[i] = true;
+            enemyAlive.Add(true);
         }
+
+
 
         Font font18 = new Font("data/Joystix.ttf", 18);
 
@@ -107,14 +122,25 @@ class Game
 
         imageShot = "data/disparo.png";
 
-        shotSpeed = 22;
+        //shotSpeed = 22;
 
         activeShot = false;
+        activeShot2 = false;
 
-        coolDown = 0;
+        position = 0;
+        position2 = 0;
+
+        coolDownChangeSprite = 0;
         coolDownShot = 0;
+
+        coolDownChangeSprite2 = 0;
+        coolDownShot2 = 0;
+
         numTeletransportes = 3;
         enfriamientoTeletransporte = 0;
+
+        numTeletransportes2 = 3;
+        enfriamientoTeletransporte2 = 0;
         //-----
         score = 0;
         s = new Score();
@@ -128,22 +154,57 @@ class Game
         levelUp = true;
         maxVelocidad = 5;
         level = 1;
+
+        shot.Add(new Shot());
+        shot.Add(new Shot());
+        shot[1].SetshotSpeed();
+
+        imageArrowP1 = new Image("data/1player.png");
+        imageArrowP2 = new Image("data/2player.png");
+
+        
+        
     }
+
+    public static string GetImageShot() { return imageShot; }
+    public static StreamReader GetInputMaxScore() { return inputMaxScore; }
 
     void UpdateScreen()
     {
         SdlHardware.ClearScreen();
+        player.DrawLives(120);
 
         room.DrawOnHiddenScreen();
+        if (player.GetAlive() == true)
+        {
+            player.DrawOnHiddenScreen();
+        }
 
-        player.DrawOnHiddenScreen();
+        if (player2Active)
+        {
+            if (player.GetAlive() == true)
+            {
+                SdlHardware.DrawHiddenImage(imageArrowP1, player.GetX() + 7,
+                   player.GetY() - 30);
+            }
+            if (player2.GetAlive() == true)
+            {
+                player2.DrawOnHiddenScreen();
+                SdlHardware.DrawHiddenImage(imageArrowP2, player2.GetX() + 7,
+                    player2.GetY() - 30);
+            }
+        }
 
         if (shot.Count > 0 && activeShot == true)
         {
             shot[0].DrawOnHiddenScreen();
         }
+        if (activeShot2)
+        {
+            shot[1].DrawOnHiddenScreen();
+        }
 
-        for (int i = 0; i < numEnemies; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
             if (enemyAlive[i] != false)
             {
@@ -151,7 +212,8 @@ class Game
             }
         }
 
-        for (int i = 0; i < numEnemies; i++)
+
+        for (int i = 0; i < enemies.Count; i++)
         {
             if (enemyAlive[i] == true)
             {
@@ -161,53 +223,55 @@ class Game
 
         if (levelUp == true)
         {
-            level += 1;
-            if (numEnemies < 20)
+            for (int i = 0; i < enemies.Count; i++)
             {
-                numEnemies += 2;
-            }
-            if (maxVelocidad < 35)
-            {
-                maxVelocidad += 2;
+                enemies.Remove(enemies[i]);
+                enemyAlive.Remove(enemyAlive[i]);
             }
 
-            for (int i = 0; i < numEnemies; i++)
-            {
-                enemies[i] = new Enemy();
-            }
 
-            finished = false;
-
-            Random rnd = new Random();
-            
-            for (int i = 0; i < numEnemies; i++)
-            {
-                int randomX = rnd.Next(200, 800);
-                int randomY = rnd.Next(50, 600);
-
-                if (randomX > player.GetX() || randomX < player.GetX() || 
-                        randomY > player.GetY() || randomY < player.GetY())
-                {
-                    enemies[i].MoveTo(randomX, randomY);
-                }
-                enemies[i].SetSpeed(rnd.Next(1, maxVelocidad),
-                    rnd.Next(1, maxVelocidad));
-            }
-
-            for (int i = 0; i < numEnemies; i++)
-            {
-                enemyAlive[i] = true;
-            }
+            room.NewLevel(ref maxVelocidad, ref finished, ref player);
         }
+        SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["lives1"] + "",
+            100, 10,
+            0xC0, 0xC0, 0xC0,
+            font24);
 
-        SdlHardware.WriteHiddenText("Level: " + level,
+        SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["level"] + " "
+                + level,
             400, 10,
             0xC0, 0xC0, 0xC0,
             font24);
-        SdlHardware.WriteHiddenText("Score: " + score,
+        SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["score"] + " "
+                + score,
             400, 40,
             0xC0, 0xC0, 0xC0,
             font24);
+
+        if (!player2Active)
+        {
+            SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["press2"] + "",
+            700, 10,
+            0xC0, 0xC0, 0xC0,
+            font24);
+        }
+        else
+        {
+            SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["lives2"] + "",
+            750, 10,
+            0xC0, 0xC0, 0xC0,
+            font24);
+            player2.DrawLives(760);
+
+            if (player2.GetUnbeatable() == true)
+            {
+                player2.DrawUnbeatable();
+            }
+        }
+        if (player.GetUnbeatable() == true)
+        {
+            player.DrawUnbeatable();
+        }
 
         SdlHardware.ShowHiddenScreen();
 
@@ -217,16 +281,16 @@ class Game
 
     void CheckUserInput()
     {
-        if (coolDown > 0)
+        if (coolDownChangeSprite > 0)
         {
-            coolDown -= 9;
+            coolDownChangeSprite -= 9;
 
         }
         if (coolDownShot > 0)
         {
             coolDownShot -= 2;
         }
-        if (coolDownShot == 0)
+        if (coolDownShot <= 0)
         {
             activeShot = false;
         }
@@ -235,318 +299,277 @@ class Game
             enfriamientoTeletransporte -= 9;
         }
 
+        if (player2Active)
+        {
+            if (coolDownChangeSprite2 > 0)
+            {
+                coolDownChangeSprite2 -= 9;
+
+            }
+            if (coolDownShot2 > 0)
+            {
+                coolDownShot2 -= 2;
+            }
+            if (coolDownShot2 <= 0)
+            {
+                activeShot2 = false;
+            }
+            if (enfriamientoTeletransporte2 > 0)
+            {
+                enfriamientoTeletransporte2 -= 9;
+            }
+        }
+
+
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
             finished = true;
 
-
-        if (!(coolDownShot > 0))
+        if (SdlHardware.KeyPressed(SdlHardware.KEY_2))
         {
+            player2Active = true;
+            player2 = new Player();
+            player2.MoveTo(200, 200);
 
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_X))
+        }
+
+
+        //PLAYER 1
+        if (player.GetAlive() == true)
+        {
+            if (!(coolDownShot > 0))
             {
-                shot.Add(new Shot());
 
-                shot[0].MoveTo(player.GetX() + 12, player.GetY() + 16);
-                shot[0].LoadImage(imageShot);
-
-                coolDownShot = 30;
-                activeShot = true;
-
-                switch (position)
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_I))
                 {
+                    player.SetUnbeatable(false);
+                    Shot.Shoot(player, ref coolDownShot, 0, ref position,
+                        ref activeShot);
+                }
+            }
+            player.Reduce();
 
-                    case 0:
-                        shot[0].speedY(-shotSpeed);
-                        shot[0].speedX(0);
-                        break;
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_O))
+            {
+                player.ChangeVelocity(position, ref player);
+            }
 
-                    case 1:
-                        //TOCADO
-                        shot[0].speedY(((-shotSpeed)) / 2);
-                        shot[0].speedX((shotSpeed) / 2);
-                        break;
+            player.Move();
+            shot[0].Move(position);
 
-                    case 2:
-                        shot[0].speedY(-shotSpeed / 2);
-                        shot[0].speedX(shotSpeed / 2);
-                        break;
+            if (coolDownChangeSprite > 0)
+            {
+                return;
+            }
 
-                    case 3:
-                        shot[0].speedY(-shotSpeed / 2);
-                        shot[0].speedX(shotSpeed / 2);
-                        break;
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
+            {
+                position++;
+                if (position < 0)
+                {
+                    position = SIZE - 1;
+                }
+                else if (position > (SIZE - 1))
+                {
+                    position = 0;
+                }
+                player.LoadImage(imagesPlayer[position]);
 
-                    case 4:
-                        shot[0].speedX(shotSpeed);
-                        shot[0].speedY(0);
-                        break;
+                coolDownChangeSprite = 10;
 
-                    case 5:
-                        shot[0].speedY(shotSpeed / 2);
-                        shot[0].speedX(shotSpeed / 2);
-                        break;
+            }
 
-                    case 6:
-                        shot[0].speedY(shotSpeed / 2);
-                        shot[0].speedX(shotSpeed / 2);
-                        break;
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
+            {
+                position--;
+                if (position < 0)
+                {
+                    position = SIZE - 1;
+                }
+                else if (position > (SIZE - 1))
+                {
+                    position--;
+                }
+                player.LoadImage(imagesPlayer[position]);
 
-                    case 7:
-                        shot[0].speedY(shotSpeed / 2);
-                        shot[0].speedX(shotSpeed / 2);
-                        break;
+                coolDownChangeSprite = 10;
+            }
+            if (enfriamientoTeletransporte > 0)
+            {
+                return;
+            }
 
-                    case 8:
-                        shot[0].speedY(shotSpeed);
-                        shot[0].speedX(0);
-                        break;
-
-                    case 9:
-                        shot[0].speedY(shotSpeed / 2);
-                        shot[0].speedX(-shotSpeed / 2);
-                        break;
-
-                    case 10:
-                        shot[0].speedY(shotSpeed / 2);
-                        shot[0].speedX(-shotSpeed / 2);
-                        break;
-
-                    case 11:
-                        shot[0].speedY(shotSpeed / 2);
-                        shot[0].speedX(-shotSpeed / 2);
-                        break;
-
-                    case 12:
-                        shot[0].speedX(-shotSpeed);
-                        shot[0].speedY(0);
-                        break;
-
-                    //probar con Yspeed en -4
-                    case 13:
-                        shot[0].speedY(-shotSpeed / 2);
-                        shot[0].speedX(-shotSpeed / 2);
-                        break;
-
-                    case 14:
-                        shot[0].speedY(-shotSpeed / 2);
-                        shot[0].speedX(-shotSpeed / 2);
-                        break;
-
-                    case 15:
-                        shot[0].speedY(-shotSpeed / 2);
-                        shot[0].speedX(-shotSpeed / 2);
-                        break;
-
-                    default:
-                        break;
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_P))
+            {
+                if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
+                {
+                    player.Teletransporte();
+                    enfriamientoTeletransporte = 70;
+                    numTeletransportes--;
                 }
             }
         }
-
-        player.Reduce();
-
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_Z))
+        //PLAYER 2
+        
+        if (player2Active)
         {
-
-            switch (position)
+            if (player2.GetAlive() == true)
             {
-                case 0:
-                    player.IncSpeedY(-2);
-                    break;
+                player2.Reduce();
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_N))
+                {
+                    player2.ChangeVelocity(position2, ref player2);
+                }
 
-                case 1:
-                    player.IncSpeedY(-6 / 2);
-                    player.IncSpeedX(6 / 2);
-                    break;
+                player2.Move();
+                if (shot.Count > 1)
+                {
+                    shot[1].Move(position2);
+                }
 
-                case 2:
-                    player.IncSpeedY(-6 / 2);
-                    player.IncSpeedX(6 / 2);
-                    break;
 
-                case 3:
-                    player.IncSpeedY(-6 / 2);
-                    player.IncSpeedX(6 / 2);
-                    break;
+                if (coolDownChangeSprite2 > 0)
+                {
+                    return;
+                }
 
-                case 4:
-                    player.IncSpeedX(6);
-                    break;
 
-                case 5:
-                    player.IncSpeedY(6 / 2);
-                    player.IncSpeedX(6 / 2);
-                    break;
 
-                case 6:
-                    player.IncSpeedY(6 / 2);
-                    player.IncSpeedX(6 / 2);
-                    break;
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_E))
+                {
+                    position2++;
+                    if (position2 < 0)
+                    {
+                        position2 = SIZE - 1;
+                    }
+                    else if (position2 > (SIZE - 1))
+                    {
+                        position2 = 0;
+                    }
+                    player2.LoadImage(imagesPlayer[position2]);
 
-                case 7:
-                    player.IncSpeedY(6 / 2);
-                    player.IncSpeedX(6 / 2);
-                    break;
+                    coolDownChangeSprite2 = 10;
 
-                case 8:
-                    player.IncSpeedY(6);
-                    break;
+                }
 
-                case 9:
-                    player.IncSpeedY(6 / 2);
-                    player.IncSpeedX(-6 / 2);
-                    break;
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_Q))
+                {
 
-                case 10:
-                    player.IncSpeedY(6 / 2);
-                    player.IncSpeedX(-6 / 2);
-                    break;
+                    position2--;
+                    if (position2 < 0)
+                    {
+                        position2 = SIZE - 1;
+                    }
+                    else if (position2 > (SIZE - 1))
+                    {
+                        position2--;
+                    }
+                    player2.LoadImage(imagesPlayer[position2]);
 
-                case 11:
-                    player.IncSpeedY(6 / 2);
-                    player.IncSpeedX(-6 / 2);
-                    break;
+                    coolDownChangeSprite2 = 10;
+                }
+                if (enfriamientoTeletransporte2 > 0)
+                {
+                    return;
+                }
+                //NEW
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_M))
+                {
+                    if (!(enfriamientoTeletransporte2 > 0)
+                            && numTeletransportes2 > 0)
+                    {
+                        player2.Teletransporte();
+                        enfriamientoTeletransporte2 = 70;
+                        numTeletransportes2--;
+                    }
+                }
 
-                case 12:
-                    player.IncSpeedX(-6);
-                    break;
+                if (!(coolDownShot2 > 0))
+                {
 
-                case 13:
-                    player.IncSpeedY(-6 / 2);
-                    player.IncSpeedX(-6 / 2);
-                    break;
+                    if (SdlHardware.KeyPressed(SdlHardware.KEY_B) 
+                            && player2Active)
+                    {
+                        player2.SetUnbeatable(false);
+                        activeShot2 = true;
+                        Shot.Shoot(player2, ref coolDownShot2, 1, ref position2,
+                                ref activeShot2);
+                    }
+                }
 
-                case 14:
-                    player.IncSpeedY(-6 / 2);
-                    player.IncSpeedX(-6 / 2);
-                    break;
-
-                case 15:
-                    player.IncSpeedY(-6 / 2);
-                    player.IncSpeedX(-6 / 2);
-                    break;
-
-                default:
-                    break;
+                if (activeShot2)
+                {
+                    shot[1].Move(position);
+                }
             }
         }
-
-
-        player.Move();
-        shot[0].Move(position);
-
-        if (coolDown > 0)
-        {
-            return;
-        }
-
-
-        //NEW
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
-        {
-            position++;
-            if (position < 0)
-            {
-                position = SIZE - 1;
-            }
-            else if (position > (SIZE - 1))
-            {
-                position = 0;
-            }
-            player.LoadImage(imagesPlayer[position]);
-
-            coolDown = 10;
-
-        }
-        //NEW
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
-        {
-
-            position--;
-            if (position < 0)
-            {
-                position = SIZE - 1;
-            }
-            else if (position > (SIZE - 1))
-            {
-                position--;
-            }
-            player.LoadImage(imagesPlayer[position]);
-
-            coolDown = 10;
-        }
-        if (enfriamientoTeletransporte > 0)
-        {
-            return;
-        }
-        //NEW
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_C))
-        {
-            if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
-            {
-                player.Teletransporte();
-                enfriamientoTeletransporte = 70;
-                numTeletransportes--;
-            }
-        }
-
+        
     }
 
-    static void UpdateWorld()
+    void UpdateWorld()
     {
         // Move enemies, background, etc 
-        for (int i = 0; i < numEnemies; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].Move();
             enemies[i].InfiniteScreen();
         }
 
         player.InfiniteScreen();
-        shot[0].InfiniteScreen();
+
+        if (player2Active)
+        {
+            player2.InfiniteScreen();
+        }
+
+        foreach (Shot s in shot)
+        {
+            s.InfiniteScreen();
+        } 
     }
 
-    static void CheckGameStatus()
+
+    public  void CheckGameStatus()
     {
-        // Check collisions and apply game logic
-        for (int i = 0; i < numEnemies; i++)
+        
+        Shot.CollisionShot(0, ref activeShot);
+
+        if (player.GetUnbeatable() == false)
+            Player.CollisionPlayer(ref player);
+        
+
+        if ((player.GetAlive() == false && player2Active == false)||
+                (player.GetAlive() == false && player2.GetAlive()== false))
         {
-            if (player.CollisionsWith(enemies[i]) && enemyAlive[i] == true)
-            {
-                string line = inputMaxScore.ReadLine();
-
-                maxScore = Convert.ToInt32(line);
-                inputMaxScore.Close();
-
-                if (score > maxScore)
-                {
-                    maxScore = score;
-                    File.WriteAllText(fileMaxScore, Convert.ToString(score));
-
-                }
-                Score.Run(score, maxScore);
-                score = 0;
-                finished = true;
-            }
-
-            if (shot[0].CollisionsWith(enemies[i]) && enemyAlive[i] == true
-                && activeShot == true)
-            {
-                enemyAlive[i] = false;
-                score += 20;
-            }
+            finished = true;
+            activeShot = false;
+            activeShot2 = false;
+            Score.Run(score, maxScore);
+            player2Active = false;
         }
+        if (player.GetLives()<=0)
+        {
+            player.SetAlive(false);
+        }
+
+        
+        if (player2Active)
+        {
+            if (activeShot2)
+                Shot.CollisionShot(1, ref activeShot2);
+
+            if (player2.GetUnbeatable() == false)
+                Player.CollisionPlayer(ref player2);
+            
+            if (player2.GetLives() <= 0)
+                player2.SetAlive(false);
+        } 
     }
 
     static void PauseUntilNextFrame()
     {
         SdlHardware.Pause(40);
-    }
 
-    /*static void UpdateHighscore()
-    {
-        // Save highest score
-        // TO DO
-    }*/
+    }
 
     public void Run()
     {
@@ -559,8 +582,6 @@ class Game
             CheckGameStatus();
         }
         while (!finished);
-
-
-        //UpdateHighscore();
+        inputMaxScore.Close();
     }
 }
