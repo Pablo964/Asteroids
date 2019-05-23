@@ -24,6 +24,11 @@
                 }
                 else if (w.GetChosenOption() == 2)
                 {
+                    Controls controls = new Controls();
+                    controls.Run();
+                }
+                else if (w.GetChosenOption() == 3)
+                {
                     CreditsScreen credits = new CreditsScreen();
                     credits.Run();
                 }

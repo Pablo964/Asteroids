@@ -2,10 +2,10 @@
 {
     public void Run()
     {
-        Image welcome = new Image("data/credits.png");
+        Image credits = new Image("data/credits.png");
         Font font18 = new Font("data/Joystix.ttf", 18);
         SdlHardware.ClearScreen();
-        SdlHardware.DrawHiddenImage(welcome, -100, -90);
+        SdlHardware.DrawHiddenImage(credits, -100, -90);
         SdlHardware.WriteHiddenText("Asteroids Remake by Pablo",
             390, 630,
             0xCC, 0xCC, 0xCC,

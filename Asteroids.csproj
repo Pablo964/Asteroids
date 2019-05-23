@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Asteroids.cs" />
     <Compile Include="ChooseLenguage.cs" />
+    <Compile Include="Controls.cs" />
     <Compile Include="CreditsScreen.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Font.cs" />

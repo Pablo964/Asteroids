@@ -31,12 +31,17 @@ class WelcomeScreen
             400, 470,
             0xC0, 0xC0, 0xC0,
             font24);
-        SdlHardware.WriteHiddenText("2. " + ChooseLanguage.lenguage["credits"],
+        SdlHardware.WriteHiddenText("2. " + 
+                ChooseLanguage.lenguage["controlsAndMore"],
             400, 500,
+            0xC0, 0xC0, 0xC0,
+            font24);
+        SdlHardware.WriteHiddenText("3. " + ChooseLanguage.lenguage["credits"],
+            400, 530,
             0xA0, 0xA0, 0xA0,
             font24);
         SdlHardware.WriteHiddenText("Q. " + ChooseLanguage.lenguage["quit"],
-            400, 530,
+            400, 560,
             0x80, 0x80, 0x80,
             font24);
 
