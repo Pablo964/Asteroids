@@ -67,7 +67,6 @@ class Shot : Sprite
         }
     }
 
-
     public static void Shoot(Player player, ref int coolDownShot, 
             int positionShot, ref int positionSprite, ref bool activeShot)
     {
@@ -79,6 +78,11 @@ class Shot : Sprite
         Game.shot[positionShot].ShotDirection(positionSprite, positionShot);
     }
 
+    /*
+     * this method receives the shot from the player who took it
+     * and depending on where the player is looking adds or
+     * subtracts speed to the x-axis or y-axis.
+     */
     public void ShotDirection(int position, int playerShot)
     {
         switch (position)
@@ -90,7 +94,7 @@ class Shot : Sprite
                 break;
 
             case 1:
-                //TOCADO
+
                 Game.shot[playerShot].speedY(((-shotSpeed)) / 2);
                 Game.shot[playerShot].speedX((shotSpeed) / 2);
                 break;
@@ -150,7 +154,6 @@ class Shot : Sprite
                 Game.shot[playerShot].speedY(0);
                 break;
 
-            //probar con Yspeed en -4
             case 13:
                 Game.shot[playerShot].speedY(-shotSpeed / 2);
                 Game.shot[playerShot].speedX(-shotSpeed / 2);

@@ -43,6 +43,10 @@ class Sprite
         currentDirection = RIGHT;
     }
 
+    public void SetContainsSequence(bool newContainsSequence)
+    {
+        containsSequence = newContainsSequence;
+    }
     public Sprite(string imageName)
         : this()
     {
@@ -67,7 +71,7 @@ class Sprite
         sequence[direction] = new Image[amountOfFrames];
         for (int i = 0; i < amountOfFrames; i++)
             sequence[direction][i] = new Image(names[i]);
-        containsSequence = true;
+        //containsSequence = true;
         currentFrame = 0;
     }
     //NEW

@@ -11,19 +11,19 @@ class Room
     //aumentar array
     protected string[] levelData =
     {
-        "      1                                ",
-        "                                       ",
-        "         1                             ",
-        "                                       ",
-        "                                       ",
-        "           2                           ",
         "                                       ",
         "                                       ",
         "                                       ",
         "                                       ",
-        "        2                              ",
         "                                       ",
-        "                                 1     ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
         "                                       "};
 
     public Room()

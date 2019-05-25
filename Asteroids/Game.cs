@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * all variables with suffix 1 belong to player 1, 
+ * and those with suffix 2 belong to player 2
+ */
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +12,7 @@ class Game
 
     public static Player player;
     public static Player player2;
-    protected bool player2Active;
+    public static bool player2Active;
     public static List<Shot> shot;
     public static int numEnemies;
     protected int coolDownChangeSprite;
@@ -53,6 +57,9 @@ class Game
     protected int maxVelocidad;
     public static int level;
 
+    private Image imageArrowP1;
+    private Image imageArrowP2;
+
     public Game()
     {
         maxEnemies = 20;
@@ -94,7 +101,7 @@ class Game
         Font font18 = new Font("data/Joystix.ttf", 18);
 
         room = new Room();
-        //NEW
+
         imagesPlayer = new string[SIZE];
         imagesPlayer[0] = "data/nave_up.png";
         imagesPlayer[1] = "data/nave_up4.png";
@@ -139,11 +146,7 @@ class Game
         s = new Score();
         font24 = new Font("data/Joystix.ttf", 24);
 
-        if (File.Exists(fileMaxScore))
-        {
-            inputMaxScore = new StreamReader(fileMaxScore);
-        }
-
+        
         levelUp = true;
         maxVelocidad = 5;
         level = 1;
@@ -151,6 +154,10 @@ class Game
         shot.Add(new Shot());
         shot.Add(new Shot());
         shot[1].SetshotSpeed();
+
+        imageArrowP1 = new Image("data/1player.png");
+        imageArrowP2 = new Image("data/2player.png");
+
     }
 
     public static string GetImageShot() { return imageShot; }
@@ -159,14 +166,27 @@ class Game
     void UpdateScreen()
     {
         SdlHardware.ClearScreen();
+        player.DrawLives(120);
 
         room.DrawOnHiddenScreen();
-
-        player.DrawOnHiddenScreen();
+        if (player.GetAlive() == true)
+        {
+            player.DrawOnHiddenScreen();
+        }
 
         if (player2Active)
         {
-            player2.DrawOnHiddenScreen();
+            if (player.GetAlive() == true)
+            {
+                SdlHardware.DrawHiddenImage(imageArrowP1, player.GetX() + 7,
+                   player.GetY() - 30);
+            }
+            if (player2.GetAlive() == true)
+            {
+                player2.DrawOnHiddenScreen();
+                SdlHardware.DrawHiddenImage(imageArrowP2, player2.GetX() + 7,
+                    player2.GetY() - 30);
+            }
         }
 
         if (shot.Count > 0 && activeShot == true)
@@ -206,6 +226,10 @@ class Game
 
             room.NewLevel(ref maxVelocidad, ref finished, ref player);
         }
+        SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["lives1"] + "",
+            100, 10,
+            0xC0, 0xC0, 0xC0,
+            font24);
 
         SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["level"] + " "
                 + level,
@@ -225,6 +249,24 @@ class Game
             0xC0, 0xC0, 0xC0,
             font24);
         }
+        else
+        {
+            SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["lives2"] + "",
+            750, 10,
+            0xC0, 0xC0, 0xC0,
+            font24);
+            player2.DrawLives(760);
+
+            if (player2.GetUnbeatable() == true)
+            {
+                player2.DrawUnbeatable();
+            }
+        }
+        if (player.GetUnbeatable() == true)
+        {
+            player.DrawUnbeatable();
+        }
+
         SdlHardware.ShowHiddenScreen();
 
         levelUp = true;
@@ -233,6 +275,17 @@ class Game
 
     void CheckUserInput()
     {
+        if (player.GetcoolDownRevive() > 0)
+        {
+            player.SetcoolDownRevive(player.GetcoolDownRevive() - 5);
+        }
+        if (player2Active)
+        {
+            if (player2.GetcoolDownRevive() > 0)
+            {
+                player2.SetcoolDownRevive(player2.GetcoolDownRevive() - 5);
+            }
+        }
         if (coolDownChangeSprite > 0)
         {
             coolDownChangeSprite -= 9;
@@ -283,165 +336,197 @@ class Game
             player2.MoveTo(200, 200);
 
         }
-        if (!(coolDownShot > 0))
-        {
-
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_I))
-            {
-                
-                Shot.Shoot(player, ref coolDownShot, 0, ref position,
-                    ref activeShot);
-            }
-        }
-        if (!(coolDownShot2 > 0))
-        {
-
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_B) && player2Active)
-            {
-                activeShot2 = true;
-                Shot.Shoot(player2, ref coolDownShot2, 1, ref position2,
-                        ref activeShot2);
-            }
-        }
-        player.Reduce();
-
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_O))
-        {
-            player.ChangeVelocity(position, ref player);
-        }
-
-        player.Move();
-        shot[0].Move(position);
-
-        if (activeShot2)
-        {
-            shot[1].Move(position);
-        }
-
-        if (coolDownChangeSprite > 0)
-        {
-            return;
-        }
 
 
         //PLAYER 1
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
-        {
-            position++;
-            if (position < 0)
-            {
-                position = SIZE - 1;
-            }
-            else if (position > (SIZE - 1))
-            {
-                position = 0;
-            }
-            player.LoadImage(imagesPlayer[position]);
-
-            coolDownChangeSprite = 10;
-
-        }
-        
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
-        {
-            position--;
-            if (position < 0)
-            {
-                position = SIZE - 1;
-            }
-            else if (position > (SIZE - 1))
-            {
-                position--;
-            }
-            player.LoadImage(imagesPlayer[position]);
-
-            coolDownChangeSprite = 10;
-        }
-        if (enfriamientoTeletransporte > 0)
+        if (player.GetcoolDownRevive() > 0)
         {
             return;
         }
-        
-        if (SdlHardware.KeyPressed(SdlHardware.KEY_P))
+        else
         {
-            if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
+            player.SetContainsSequence(false);
+        }
+        if (player.GetAlive() == true)
+        {
+            if (!(coolDownShot > 0 && player.GetcoolDownRevive() == 0))
             {
-                player.Teletransporte();
-                enfriamientoTeletransporte = 70;
-                numTeletransportes--;
+
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_I))
+                {
+                    player.SetUnbeatable(false);
+                    Shot.Shoot(player, ref coolDownShot, 0, ref position,
+                        ref activeShot);
+                }
+            }
+            player.Reduce();
+
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_O)
+                    && player.GetcoolDownRevive() == 0)
+            {
+                player.ChangeVelocity(position, ref player);
+            }
+
+            player.Move();
+            shot[0].Move(position);
+
+            if (coolDownChangeSprite > 0)
+            {
+                return;
+            }
+
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT)
+                    && player.GetcoolDownRevive() == 0)
+            {
+                position++;
+                if (position < 0)
+                {
+                    position = SIZE - 1;
+                }
+                else if (position > (SIZE - 1))
+                {
+                    position = 0;
+                }
+                player.LoadImage(imagesPlayer[position]);
+
+                coolDownChangeSprite = 10;
+
+            }
+
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT)
+                    && player.GetcoolDownRevive() == 0)
+            {
+                position--;
+                if (position < 0)
+                {
+                    position = SIZE - 1;
+                }
+                else if (position > (SIZE - 1))
+                {
+                    position--;
+                }
+                player.LoadImage(imagesPlayer[position]);
+
+                coolDownChangeSprite = 10;
+            }
+            if (enfriamientoTeletransporte > 0)
+            {
+                return;
+            }
+
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_P)
+                    && player.GetcoolDownRevive() == 0)
+            {
+                if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
+                {
+                    player.Teletransporte();
+                    enfriamientoTeletransporte = 70;
+                    numTeletransportes--;
+                }
             }
         }
-
         //PLAYER 2
+        
         if (player2Active)
         {
-
-            player2.Reduce();
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_N))
-            {
-                player2.ChangeVelocity(position2, ref player2);
-            }
-
-            player2.Move();
-            if (shot.Count > 1)
-            {
-                shot[1].Move(position2);
-            }
-            
-
-            if (coolDownChangeSprite2 > 0)
+            if (player2.GetcoolDownRevive() > 0)
             {
                 return;
             }
-
-
-
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_E))
+            else
             {
-                position2++;
-                if (position2 < 0)
-                {
-                    position2 = SIZE - 1;
-                }
-                else if (position2 > (SIZE - 1))
-                {
-                    position2 = 0;
-                }
-                player2.LoadImage(imagesPlayer[position2]);
-
-                coolDownChangeSprite2 = 10;
-
+                player2.SetContainsSequence(false);
             }
-            
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_Q))
+            if (player2.GetAlive() == true)
             {
-
-                position2--;
-                if (position2 < 0)
+                player2.Reduce();
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_N)
+                        && player2.GetcoolDownRevive() == 0)
                 {
-                    position2 = SIZE - 1;
+                    player2.ChangeVelocity(position2, ref player2);
                 }
-                else if (position2 > (SIZE - 1))
+
+                player2.Move();
+                if (shot.Count > 1)
                 {
+                    shot[1].Move(position2);
+                }
+
+
+                if (coolDownChangeSprite2 > 0)
+                {
+                    return;
+                }
+
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_E)
+                        && player2.GetcoolDownRevive() == 0)
+                {
+                    position2++;
+                    if (position2 < 0)
+                    {
+                        position2 = SIZE - 1;
+                    }
+                    else if (position2 > (SIZE - 1))
+                    {
+                        position2 = 0;
+                    }
+                    player2.LoadImage(imagesPlayer[position2]);
+
+                    coolDownChangeSprite2 = 10;
+
+                }
+
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_Q)
+                        && player2.GetcoolDownRevive() == 0)
+                {
+
                     position2--;
-                }
-                player2.LoadImage(imagesPlayer[position2]);
+                    if (position2 < 0)
+                    {
+                        position2 = SIZE - 1;
+                    }
+                    else if (position2 > (SIZE - 1))
+                    {
+                        position2--;
+                    }
+                    player2.LoadImage(imagesPlayer[position2]);
 
-                coolDownChangeSprite2 = 10;
-            }
-            if (enfriamientoTeletransporte2 > 0)
-            {
-                return;
-            }
-            //NEW
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_M))
-            {
-                if (!(enfriamientoTeletransporte2 > 0) 
-                        && numTeletransportes2 > 0)
+                    coolDownChangeSprite2 = 10;
+                }
+                if (enfriamientoTeletransporte2 > 0)
                 {
-                    player2.Teletransporte();
-                    enfriamientoTeletransporte2 = 70;
-                    numTeletransportes2--;
+                    return;
+                }
+
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_M)
+                        && player2.GetcoolDownRevive() == 0)
+                {
+                    if (!(enfriamientoTeletransporte2 > 0)
+                            && numTeletransportes2 > 0)
+                    {
+                        player2.Teletransporte();
+                        enfriamientoTeletransporte2 = 70;
+                        numTeletransportes2--;
+                    }
+                }
+
+                if (!(coolDownShot2 > 0))
+                {
+
+                    if (SdlHardware.KeyPressed(SdlHardware.KEY_B) 
+                            && player2Active 
+                            && player2.GetcoolDownRevive() == 0)
+                    {
+                        player2.SetUnbeatable(false);
+                        activeShot2 = true;
+                        Shot.Shoot(player2, ref coolDownShot2, 1, ref position2,
+                                ref activeShot2);
+                    }
+                }
+
+                if (activeShot2)
+                {
+                    shot[1].Move(position);
                 }
             }
         }
@@ -451,10 +536,10 @@ class Game
     void UpdateWorld()
     {
         // Move enemies, background, etc 
-        for (int i = 0; i < enemies.Count; i++)
+        foreach (Enemy e in enemies)
         {
-            enemies[i].Move();
-            enemies[i].InfiniteScreen();
+            e.Move();
+            e.InfiniteScreen();
         }
 
         player.InfiniteScreen();
@@ -467,24 +552,70 @@ class Game
         foreach (Shot s in shot)
         {
             s.InfiniteScreen();
-        }
-        
+        } 
     }
 
 
     public  void CheckGameStatus()
     {
+        
         Shot.CollisionShot(0, ref activeShot);
-        Player.CollisionPlayer(ref player);
 
+        if (player.GetUnbeatable() == false)
+            Player.CollisionPlayer(ref player);
+        
+
+        if ((player.GetAlive() == false && player2Active == false)||
+                (player.GetAlive() == false && player2.GetAlive()== false))
+        {
+            finished = true;
+            activeShot = false;
+            activeShot2 = false;
+            player2Active = false;
+        }
+        if (player.GetLives()<=0)
+        {
+            player.SetAlive(false);
+        }
+
+        
         if (player2Active)
         {
             if (activeShot2)
-            {
                 Shot.CollisionShot(1, ref activeShot2);
+
+            if (player2.GetUnbeatable() == false)
+                Player.CollisionPlayer(ref player2);
+            
+            if (player2.GetLives() <= 0)
+                player2.SetAlive(false);
+        }
+        if (finished == true)
+        {
+            try
+            {
+                if (File.Exists(fileMaxScore))
+                {
+                    inputMaxScore = new StreamReader(fileMaxScore);
+                }
+                string line = inputMaxScore.ReadLine();
+                maxScore = Convert.ToInt32(line);
+                if (score > maxScore)
+                {
+                    maxScore = score;
+                    File.WriteAllText(fileMaxScore,
+                            Convert.ToString(score));
+                }
+                inputMaxScore.Close();
+                score = 0;
+                Score.Run(score, maxScore);
             }
-            Player.CollisionPlayer(ref player2);
-        } 
+            catch (Exception e)
+            {
+                maxScore = score;
+                Score.Run(score, maxScore);
+            }
+        }
     }
 
     static void PauseUntilNextFrame()
@@ -503,6 +634,6 @@ class Game
             CheckGameStatus();
         }
         while (!finished);
-        inputMaxScore.Close();
+       
     }
 }
