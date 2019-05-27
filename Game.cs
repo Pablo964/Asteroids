@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 class Game
 {
@@ -60,6 +59,9 @@ class Game
     private Image imageArrowP1;
     private Image imageArrowP2;
 
+    
+
+
     public Game()
     {
         maxEnemies = 20;
@@ -101,7 +103,7 @@ class Game
         Font font18 = new Font("data/Joystix.ttf", 18);
 
         room = new Room();
-        //NEW
+
         imagesPlayer = new string[SIZE];
         imagesPlayer[0] = "data/nave_up.png";
         imagesPlayer[1] = "data/nave_up4.png";
@@ -146,11 +148,7 @@ class Game
         s = new Score();
         font24 = new Font("data/Joystix.ttf", 24);
 
-        if (File.Exists(fileMaxScore))
-        {
-            inputMaxScore = new StreamReader(fileMaxScore);
-        }
-
+        
         levelUp = true;
         maxVelocidad = 5;
         level = 1;
@@ -163,7 +161,7 @@ class Game
         imageArrowP2 = new Image("data/2player.png");
 
         
-        
+
     }
 
     public static string GetImageShot() { return imageShot; }
@@ -281,6 +279,17 @@ class Game
 
     void CheckUserInput()
     {
+        if (player.GetcoolDownRevive() > 0)
+        {
+            player.SetcoolDownRevive(player.GetcoolDownRevive() - 5);
+        }
+        if (player2Active)
+        {
+            if (player2.GetcoolDownRevive() > 0)
+            {
+                player2.SetcoolDownRevive(player2.GetcoolDownRevive() - 5);
+            }
+        }
         if (coolDownChangeSprite > 0)
         {
             coolDownChangeSprite -= 9;
@@ -334,21 +343,31 @@ class Game
 
 
         //PLAYER 1
+        if (player.GetcoolDownRevive() > 0)
+        {
+            return;
+        }
+        else
+        {
+            player.SetContainsSequence(false);
+        }
         if (player.GetAlive() == true)
         {
-            if (!(coolDownShot > 0))
+            if (!(coolDownShot > 0 && player.GetcoolDownRevive() == 0))
             {
 
                 if (SdlHardware.KeyPressed(SdlHardware.KEY_I))
                 {
                     player.SetUnbeatable(false);
+
                     Shot.Shoot(player, ref coolDownShot, 0, ref position,
                         ref activeShot);
                 }
             }
             player.Reduce();
 
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_O))
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_O)
+                    && player.GetcoolDownRevive() == 0)
             {
                 player.ChangeVelocity(position, ref player);
             }
@@ -361,7 +380,8 @@ class Game
                 return;
             }
 
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT))
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_RIGHT)
+                    && player.GetcoolDownRevive() == 0)
             {
                 position++;
                 if (position < 0)
@@ -378,7 +398,8 @@ class Game
 
             }
 
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT))
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_LEFT)
+                    && player.GetcoolDownRevive() == 0)
             {
                 position--;
                 if (position < 0)
@@ -398,7 +419,8 @@ class Game
                 return;
             }
 
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_P))
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_P)
+                    && player.GetcoolDownRevive() == 0)
             {
                 if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
                 {
@@ -412,10 +434,19 @@ class Game
         
         if (player2Active)
         {
+            if (player2.GetcoolDownRevive() > 0)
+            {
+                return;
+            }
+            else
+            {
+                player2.SetContainsSequence(false);
+            }
             if (player2.GetAlive() == true)
             {
                 player2.Reduce();
-                if (SdlHardware.KeyPressed(SdlHardware.KEY_N))
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_N)
+                        && player2.GetcoolDownRevive() == 0)
                 {
                     player2.ChangeVelocity(position2, ref player2);
                 }
@@ -432,9 +463,8 @@ class Game
                     return;
                 }
 
-
-
-                if (SdlHardware.KeyPressed(SdlHardware.KEY_E))
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_E)
+                        && player2.GetcoolDownRevive() == 0)
                 {
                     position2++;
                     if (position2 < 0)
@@ -451,7 +481,8 @@ class Game
 
                 }
 
-                if (SdlHardware.KeyPressed(SdlHardware.KEY_Q))
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_Q)
+                        && player2.GetcoolDownRevive() == 0)
                 {
 
                     position2--;
@@ -471,8 +502,9 @@ class Game
                 {
                     return;
                 }
-                //NEW
-                if (SdlHardware.KeyPressed(SdlHardware.KEY_M))
+
+                if (SdlHardware.KeyPressed(SdlHardware.KEY_M)
+                        && player2.GetcoolDownRevive() == 0)
                 {
                     if (!(enfriamientoTeletransporte2 > 0)
                             && numTeletransportes2 > 0)
@@ -487,7 +519,8 @@ class Game
                 {
 
                     if (SdlHardware.KeyPressed(SdlHardware.KEY_B) 
-                            && player2Active)
+                            && player2Active 
+                            && player2.GetcoolDownRevive() == 0)
                     {
                         player2.SetUnbeatable(false);
                         activeShot2 = true;
@@ -508,10 +541,10 @@ class Game
     void UpdateWorld()
     {
         // Move enemies, background, etc 
-        for (int i = 0; i < enemies.Count; i++)
+        foreach (Enemy e in enemies)
         {
-            enemies[i].Move();
-            enemies[i].InfiniteScreen();
+            e.Move();
+            e.InfiniteScreen();
         }
 
         player.InfiniteScreen();
@@ -543,7 +576,6 @@ class Game
             finished = true;
             activeShot = false;
             activeShot2 = false;
-            Score.Run(score, maxScore);
             player2Active = false;
         }
         if (player.GetLives()<=0)
@@ -562,13 +594,40 @@ class Game
             
             if (player2.GetLives() <= 0)
                 player2.SetAlive(false);
-        } 
+        }
+        if (finished == true)
+        {
+            try
+            {
+                if (File.Exists(fileMaxScore))
+                {
+                    inputMaxScore = new StreamReader(fileMaxScore);
+                }
+                
+                string line = inputMaxScore.ReadLine();
+                inputMaxScore.Close();
+                maxScore = Convert.ToInt32(line);
+                if (score > maxScore)
+                {
+                    maxScore = score;
+                    File.WriteAllText(fileMaxScore,
+                            Convert.ToString(score));
+                }
+                Score.Run(score, maxScore);
+                score = 0;
+            }
+            catch (Exception e)
+            {
+                maxScore = score;
+                Score.Run(score, maxScore);
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 
     static void PauseUntilNextFrame()
     {
         SdlHardware.Pause(40);
-
     }
 
     public void Run()
@@ -582,6 +641,6 @@ class Game
             CheckGameStatus();
         }
         while (!finished);
-        inputMaxScore.Close();
+       
     }
 }

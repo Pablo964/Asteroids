@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 class Score
 {
@@ -40,7 +36,6 @@ class Score
             0x80, 0x80, 0x80,
             font24);
 
-
         SdlHardware.ShowHiddenScreen();
 
         do
@@ -49,7 +44,7 @@ class Score
             {
                 exit = 0;
             }
-            SdlHardware.Pause(100); // To avoid using 100% CPU
+            SdlHardware.Pause(100);
         }
         while (exit != 0);
     }

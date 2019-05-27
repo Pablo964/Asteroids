@@ -11,19 +11,19 @@ class Room
     //aumentar array
     protected string[] levelData =
     {
-        "      1                                ",
-        "                                       ",
-        "         1                             ",
-        "                                       ",
-        "                                       ",
-        "           2                           ",
         "                                       ",
         "                                       ",
         "                                       ",
         "                                       ",
-        "        2                              ",
         "                                       ",
-        "                                 1     ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
+        "                                       ",
         "                                       "};
 
     public Room()
@@ -55,44 +55,52 @@ class Room
             ref Player player)
     {
         Game.level += 1;
-        if (Game.numEnemies < 20)
+        
+        if (Game.level % 10 != 0)
         {
-            Game.numEnemies += 2;
-        }
-        if (maxVelocidad < 35)
-        {
-            maxVelocidad += 2;
-        }
 
-
-        for (int i = 0; i < Game.numEnemies; i++)
-        {
-            Game.enemies.Add(new Enemy());
-        }
-
-        finished = false;
-
-        Random rnd = new Random();
-
-        for (int i = 0; i < Game.enemies.Count; i++)
-        {
-            int randomX = rnd.Next(200, 800);
-            int randomY = rnd.Next(50, 600);
-
-            if (randomX > player.GetX() || randomX < player.GetX() ||
-                    randomY > player.GetY() || randomY < player.GetY())
+            if (Game.numEnemies < 20)
             {
-                Game.enemies[i].MoveTo(randomX, randomY);
+                Game.numEnemies += 2;
             }
-            Game.enemies[i].SetSpeed(rnd.Next(1, maxVelocidad),
-                rnd.Next(1, maxVelocidad));
-        }
+            if (maxVelocidad < 35)
+            {
+                maxVelocidad += 2;
+            }
 
-        for (int i = 0; i < Game.numEnemies; i++)
+
+            for (int i = 0; i < Game.numEnemies; i++)
+            {
+                Game.enemies.Add(new Enemy());
+            }
+
+            finished = false;
+
+            Random rnd = new Random();
+
+            for (int i = 0; i < Game.enemies.Count; i++)
+            {
+                int randomX = rnd.Next(200, 800);
+                int randomY = rnd.Next(50, 600);
+
+                if (randomX > player.GetX() || randomX < player.GetX() ||
+                        randomY > player.GetY() || randomY < player.GetY())
+                {
+                    Game.enemies[i].MoveTo(randomX, randomY);
+                }
+                Game.enemies[i].SetSpeed(rnd.Next(1, maxVelocidad),
+                    rnd.Next(1, maxVelocidad));
+            }
+
+            for (int i = 0; i < Game.numEnemies; i++)
+            {
+                Game.enemyAlive.Add(true);
+            }
+
+        }
+        else
         {
-            Game.enemyAlive.Add(true);
+            
         }
     }
-   
-
 }

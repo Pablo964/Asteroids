@@ -35,7 +35,7 @@
             }
 
         }
-        while (w.GetChosenOption() != 3);
+        while (w.GetChosenOption() != 4);
 
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 class Shot : Sprite
 {
     protected int shotSpeed;
+    static Sound fireSound, deathEnemySound;
 
     public Shot()
     {
@@ -14,21 +15,33 @@ class Shot : Sprite
         width = 10;
         height = 10;
         shotSpeed = 45;
+
+        fireSound = new Sound("data/asteroidsFire.wav");
+        
+        deathEnemySound = new Sound("data/asteroidsDeath.wav");
     }
 
     public int GetshotSpeed() { return shotSpeed; }
     public void SetshotSpeed() { this.shotSpeed = 22; }
 
-    public static void CollisionShot(int posShot, ref bool activeShot)
+    public static void CollisionShot(int shotPlayer, ref bool activeShot)
     {
+        
         for (int i = 0; i < Game.enemies.Count; i++)
         {
-            if ((Game.shot[posShot].CollisionsWith(Game.enemies[i])
+            if ((Game.shot[shotPlayer].CollisionsWith(Game.enemies[i])
                        && Game.enemyAlive[i] == true
                        && activeShot == true)
                        && Game.enemies[i].TypeEnemy() != "smallAsteroid")
             {
+
                 Game.enemyAlive[i] = false;
+
+                if (shotPlayer == 0)
+                    deathEnemySound.PlayOnce();
+                else
+                    deathEnemySound.PlayOnce();
+
                 activeShot = false;
                 
                 Random rnd = new Random();
@@ -56,21 +69,24 @@ class Shot : Sprite
 
                 Game.score += 20;
             }
-            else if (Game.shot[posShot].CollisionsWith(Game.enemies[i])
+            else if (Game.shot[shotPlayer].CollisionsWith(Game.enemies[i])
                     && Game.enemyAlive[i] == true
                     && activeShot == true
                     && Game.enemies[i].TypeEnemy() == "smallAsteroid")
             {
+                deathEnemySound.PlayOnce();
                 Game.enemyAlive[i] = false;
                 activeShot = false;
             }
         }
     }
-
-
+    
     public static void Shoot(Player player, ref int coolDownShot, 
             int positionShot, ref int positionSprite, ref bool activeShot)
     {
+
+        fireSound.PlayOnce();
+
         Game.shot[positionShot].MoveTo(player.GetX() + 12, player.GetY() + 16);
         Game.shot[positionShot].LoadImage(Game.GetImageShot());
 
@@ -79,6 +95,11 @@ class Shot : Sprite
         Game.shot[positionShot].ShotDirection(positionSprite, positionShot);
     }
 
+    /*
+     * this method receives the shot from the player who took it
+     * and depending on where the player is looking adds or
+     * subtracts speed to the x-axis or y-axis.
+     */
     public void ShotDirection(int position, int playerShot)
     {
         switch (position)
@@ -90,7 +111,7 @@ class Shot : Sprite
                 break;
 
             case 1:
-                //TOCADO
+
                 Game.shot[playerShot].speedY(((-shotSpeed)) / 2);
                 Game.shot[playerShot].speedX((shotSpeed) / 2);
                 break;
@@ -150,7 +171,6 @@ class Shot : Sprite
                 Game.shot[playerShot].speedY(0);
                 break;
 
-            //probar con Yspeed en -4
             case 13:
                 Game.shot[playerShot].speedY(-shotSpeed / 2);
                 Game.shot[playerShot].speedX(-shotSpeed / 2);

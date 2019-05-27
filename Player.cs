@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 class Player : Sprite
 {
@@ -11,6 +10,9 @@ class Player : Sprite
     protected Font font8;
     protected int unbeatableY;
     protected int unbeatableX;
+    private int coolDownRevive;
+    static Sound deathPlayerSound;
+
     public Player()
     {
         LoadImage("data/nave_up.png");
@@ -26,8 +28,21 @@ class Player : Sprite
         live = new Image("data/vida.png");
         font8 = new Font("data/Joystix.ttf", 8);
         
+        LoadSequence(DISAPPEARING,
+            new string[] { "data/explosion1.png",
+                "data/explosion2.png", "data/explosion3.png",
+                "data/explosion4.png"});
+        
+        coolDownRevive = 0;
+
+        deathPlayerSound = new Sound("data/deathPlayerSound.wav");
     }
 
+    public int GetcoolDownRevive() { return this.coolDownRevive; }
+    public void SetcoolDownRevive(int newCoolDown)
+    {
+        this.coolDownRevive = newCoolDown;
+    }
     public bool GetUnbeatable() { return unbeatable; }
     public void SetUnbeatable(bool newUnbeatable) { unbeatable = newUnbeatable;}
 
@@ -75,25 +90,13 @@ class Player : Sprite
             if (player.CollisionsWith(Game.enemies[i]) 
                 && Game.enemyAlive[i] == true)
             {
-
+                deathPlayerSound.PlayOnce();
                 player.lives--;
-
                 player.unbeatable = true;
-
-                if (Game.finished == true)
-                {
-                    string line = Game.inputMaxScore.ReadLine();
-                    Game.maxScore = Convert.ToInt32(line);
-                    if (Game.score > Game.maxScore)
-                    {
-                        Game.maxScore = Game.score;
-                        File.WriteAllText(Game.fileMaxScore,
-                                Convert.ToString(Game.score));
-
-                    }
-                    Game.score = 0;
-                    return;
-                }
+                player.containsSequence = true;
+                player.ChangeDirection(DISAPPEARING);
+                player.coolDownRevive = 200;
+                player.SetSpeed(0,0);
             }
         }
     }
@@ -244,26 +247,16 @@ class Player : Sprite
     }
     override public void Move()
     {
-        MoveRight();
-        MoveDown();
+        MoveX();
+        MoveY();
     }
 
-    public void MoveRight()
+    public void MoveX()
     {
         x += xSpeed;
     }
 
-    public void MoveLeft()
-    {
-        x -= xSpeed;
-    }
-
-    public void MoveUp()
-    {
-        y -= ySpeed;
-    }
-
-    public void MoveDown()
+    public void MoveY()
     {
         y += ySpeed;
     }

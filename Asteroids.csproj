@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Asteroids.cs" />
+    <Compile Include="Boss.cs" />
     <Compile Include="ChooseLenguage.cs" />
     <Compile Include="Controls.cs" />
     <Compile Include="CreditsScreen.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="SdlHardware.cs" />
     <Compile Include="Shot.cs" />
     <Compile Include="SmallAsteroid.cs" />
+    <Compile Include="Sound.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="WelcomeScreen.cs" />
   </ItemGroup>

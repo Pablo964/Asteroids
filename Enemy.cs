@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 class Enemy : Sprite
 {
@@ -21,22 +20,9 @@ class Enemy : Sprite
 
     public override void Move()
     {
-        if (negativeX == 0)
-        {
-            x -= xSpeed;
-        }
-        else
-        {
-            x += xSpeed;
-        }
-        if (negativeY == 0)
-        {
-            y -= ySpeed;
-        }
-        else
-        {
-            y += ySpeed;
-        }
+        x = (negativeX == 0) ? x-=xSpeed : x += xSpeed;
+
+        y = (negativeY == 0) ? y -= ySpeed : y += xSpeed;
     }
 
     public virtual string TypeEnemy()

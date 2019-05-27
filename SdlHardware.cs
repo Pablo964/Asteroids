@@ -1,13 +1,4 @@
-﻿/**
- * SdlHardware.cs - Hides SDL library
- * 
- * Nacho Cabanes, 2013
- * 
- * Changes:
- * 0.01, 24-jul-2013: Initial version, based on SdlMuncher 0.14
- */
-
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using Tao.Sdl;
 using System;
@@ -63,6 +54,9 @@ class SdlHardware
         // so that they are not too near
         mouseClickLapse = 10;
         lastMouseClick = Sdl.SDL_GetTicks();
+
+        SdlMixer.Mix_OpenAudio(22050,
+            (short)SdlMixer.MIX_DEFAULT_FORMAT, 2, 1024);
     }
 
     public static void ClearScreen()

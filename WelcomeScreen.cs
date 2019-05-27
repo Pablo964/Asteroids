@@ -56,9 +56,13 @@ class WelcomeScreen
             {
                 option = 2;
             }
-            if (SdlHardware.KeyPressed(SdlHardware.KEY_Q))
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_3))
             {
                 option = 3;
+            }
+            if (SdlHardware.KeyPressed(SdlHardware.KEY_Q))
+            {
+                option = 4;
             }
             SdlHardware.Pause(100); // To avoid using 100% CPU
         }

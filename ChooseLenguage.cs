@@ -158,7 +158,18 @@ class ChooseLanguage
                     lenguage.Add("moveP2", "to rotate to the left press " +
                        "the 'q' and to rotate the right press 'e'");
                     lenguage.Add("details", "details");
-
+                    lenguage.Add("development1", "The game consists of " +
+                       "destroy by firing as many enemies as possible");
+                    lenguage.Add("development2", "player 1 is represented by" +
+                        " a red arrow : ");
+                    lenguage.Add("development3", "player 2 is represented" +
+                        " by a blue arrow: ");
+                    lenguage.Add("development4", "when we're hit by an enemy" +
+                        " we'll lose a life.");
+                    lenguage.Add("development5", "and we'll become " +
+                        "invincible until we fire.");
+                    lenguage.Add("chooseP2", "To play with the second " +
+                        "player press 2 in the game");
                     break;
 
                 case 400:
@@ -189,7 +200,18 @@ class ChooseLanguage
                         "appuyez sur 'q' la et pour faire" +
                         " pivoter 'e' la droite");
                     lenguage.Add("details", "détails");
-
+                    lenguage.Add("development1", "Le jeu consiste à détruire"+
+                        " en tirant sur autant d'ennemis que possible.");
+                    lenguage.Add("development2", "le joueur 1 est représenté" +
+                        " par une flèche rouge : ");
+                    lenguage.Add("development3", "le joueur 2 est représenté" +
+                        " par une flèche bleue: ");
+                    lenguage.Add("development4", "quand nous sommes frappés" +
+                        " par un ennemi, nous perdons une vie.");
+                    lenguage.Add("development5", "et nous deviendrons " +
+                        "invincibles jusqu'à ce qu'on tire.");
+                    lenguage.Add("chooseP2", "Pour jouer avec le deuxième" +
+                        " joueur, appuyez sur 2 dans le jeu.");
                     break;
             }
             shotX = 500;
