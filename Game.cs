@@ -69,7 +69,7 @@ class Game
         player.MoveTo(200, 100);
         shot = new List<Shot>();
         shot.Add(new Shot());
-        numEnemies = 2;
+        numEnemies = 1;
         enemies = new List<Enemy>();
         //---
         enemyAlive = new List<bool>();
@@ -204,6 +204,7 @@ class Game
 
         for (int i = 0; i < enemies.Count; i++)
         {
+            Console.WriteLine("Enemies game: " + enemies.Count);
             if (enemyAlive[i] != false)
             {
                 enemies[i].DrawOnHiddenScreen();
@@ -246,6 +247,13 @@ class Game
             0xC0, 0xC0, 0xC0,
             font24);
 
+        if (Room.bossStage)
+        {
+            SdlHardware.WriteHiddenText("BOSS STAGE",
+            400, 60,
+            0xC0, 0xC0, 0xC0,
+            font24);
+        }
         if (!player2Active)
         {
             SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["press2"] + "",
@@ -270,7 +278,7 @@ class Game
         {
             player.DrawUnbeatable();
         }
-
+        
         SdlHardware.ShowHiddenScreen();
 
         levelUp = true;

@@ -5,6 +5,7 @@ class Shot : Sprite
 {
     protected int shotSpeed;
     static Sound fireSound, deathEnemySound;
+    protected static int quantityEnemiesInBoss = 6;
 
     public Shot()
     {
@@ -17,7 +18,6 @@ class Shot : Sprite
         shotSpeed = 45;
 
         fireSound = new Sound("data/asteroidsFire.wav");
-        
         deathEnemySound = new Sound("data/asteroidsDeath.wav");
     }
 
@@ -43,7 +43,7 @@ class Shot : Sprite
                     deathEnemySound.PlayOnce();
 
                 activeShot = false;
-                
+
                 Random rnd = new Random();
 
                 for (int j = 0; j < 2; j++)
@@ -66,7 +66,23 @@ class Shot : Sprite
                     Game.enemyAlive.Add(true);
                     Game.enemies[j].DrawOnHiddenScreen();
                 }
+                if (Game.enemies[i].TypeEnemy() == "boss")
+                {
+                    for (int x = 0; x < quantityEnemiesInBoss; x++)
+                    {
+                    
+                        Game.enemies.Add(new Enemy());
+                        Game.enemies.Last().MoveTo(Game.enemies[i].GetX(),
+                            Game.enemies[i].GetY());
 
+                        Game.enemies.Last().SetSpeed(rnd.Next(1, 10),
+                            rnd.Next(1, 10));
+
+                        Game.enemyAlive.Add(true);
+                        Game.enemies[x].DrawOnHiddenScreen();
+                    }
+                    
+                }
                 Game.score += 20;
             }
             else if (Game.shot[shotPlayer].CollisionsWith(Game.enemies[i])

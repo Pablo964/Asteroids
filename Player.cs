@@ -12,6 +12,9 @@ class Player : Sprite
     protected int unbeatableX;
     private int coolDownRevive;
     static Sound deathPlayerSound;
+    private int maxSpeed;
+    private int valueIncreseSpeed;
+
 
     public Player()
     {
@@ -36,6 +39,9 @@ class Player : Sprite
         coolDownRevive = 0;
 
         deathPlayerSound = new Sound("data/deathPlayerSound.wav");
+
+        maxSpeed = 15;
+        valueIncreseSpeed = 1;
     }
 
     public int GetcoolDownRevive() { return this.coolDownRevive; }
@@ -101,84 +107,90 @@ class Player : Sprite
         }
     }
 
+
+    /*
+    * this method receives the shot from the player who took it
+    * and depending on where the player is looking adds or
+    * subtracts speed to the x-axis or y-axis.
+    */
     public void ChangeVelocity(int positionSprite, ref Player player)
     {
         switch (positionSprite)
         {
             case 0:
-                player.IncSpeedY(-2);
+                player.IncSpeedY(-valueIncreseSpeed);
                 break;
 
             case 1:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(6 / 2);
+                player.IncSpeedY(-valueIncreseSpeed);
+                player.IncSpeedX(valueIncreseSpeed);
                 break;
 
             case 2:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(6 / 2);
+                player.IncSpeedY(-valueIncreseSpeed);
+                player.IncSpeedX(valueIncreseSpeed);
                 break;
 
             case 3:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(6 / 2);
+                player.IncSpeedY(-valueIncreseSpeed);
+                player.IncSpeedX(valueIncreseSpeed);
                 break;
 
             case 4:
-                player.IncSpeedX(6);
+                player.IncSpeedX(valueIncreseSpeed);
                 break;
 
             case 5:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(6 / 2);
+                player.IncSpeedY(valueIncreseSpeed);
+                player.IncSpeedX(valueIncreseSpeed);
                 break;
 
             case 6:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(6 / 2);
+                player.IncSpeedY(valueIncreseSpeed);
+                player.IncSpeedX(valueIncreseSpeed);
                 break;
 
             case 7:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(6 / 2);
+                player.IncSpeedY(valueIncreseSpeed);
+                player.IncSpeedX(valueIncreseSpeed);
                 break;
 
             case 8:
-                player.IncSpeedY(6);
+                player.IncSpeedY(valueIncreseSpeed);
                 break;
 
             case 9:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(-6 / 2);
+                player.IncSpeedY(valueIncreseSpeed);
+                player.IncSpeedX(-valueIncreseSpeed);
                 break;
 
             case 10:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(-6 / 2);
+                player.IncSpeedY(valueIncreseSpeed);
+                player.IncSpeedX(-valueIncreseSpeed);
                 break;
 
             case 11:
-                player.IncSpeedY(6 / 2);
-                player.IncSpeedX(-6 / 2);
+                player.IncSpeedY(valueIncreseSpeed);
+                player.IncSpeedX(-valueIncreseSpeed);
                 break;
 
             case 12:
-                player.IncSpeedX(-6);
+                player.IncSpeedX(-valueIncreseSpeed);
                 break;
 
             case 13:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(-6 / 2);
+                player.IncSpeedY(-valueIncreseSpeed);
+                player.IncSpeedX(-valueIncreseSpeed);
                 break;
 
             case 14:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(-6 / 2);
+                player.IncSpeedY(-valueIncreseSpeed);
+                player.IncSpeedX(-valueIncreseSpeed);
                 break;
 
             case 15:
-                player.IncSpeedY(-6 / 2);
-                player.IncSpeedX(-6 / 2);
+                player.IncSpeedY(-valueIncreseSpeed);
+                player.IncSpeedX(-valueIncreseSpeed);
                 break;
         }
     }
@@ -222,13 +234,13 @@ class Player : Sprite
     {
         this.ySpeed += +speed;
 
-        if (ySpeed > 20)
+        if (ySpeed > maxSpeed)
         {
-            ySpeed = 20;
+            ySpeed = maxSpeed;
         }
-        if (ySpeed < -20)
+        if (ySpeed < -maxSpeed)
         {
-            ySpeed = -20;
+            ySpeed = -maxSpeed;
         }
     }
 
@@ -236,13 +248,13 @@ class Player : Sprite
     {
         this.xSpeed += speed;
 
-        if (xSpeed > 20)
+        if (xSpeed > maxSpeed)
         {
-            xSpeed = 20;
+            xSpeed = maxSpeed;
         }
-        if (xSpeed < -20)
+        if (xSpeed < -maxSpeed)
         {
-            xSpeed = -20;
+            xSpeed = -maxSpeed;
         }
     }
     override public void Move()
