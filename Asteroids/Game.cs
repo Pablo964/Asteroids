@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 class Game
 {
@@ -44,6 +43,7 @@ class Game
     protected Room room;
 
     public static bool finished;
+    public static bool finishedESC;
     public static int score;
     public static int maxScore;
     public static StreamReader inputMaxScore;
@@ -60,6 +60,9 @@ class Game
     private Image imageArrowP1;
     private Image imageArrowP2;
 
+    
+
+
     public Game()
     {
         maxEnemies = 20;
@@ -67,7 +70,7 @@ class Game
         player.MoveTo(200, 100);
         shot = new List<Shot>();
         shot.Add(new Shot());
-        numEnemies = 2;
+        numEnemies = 1;
         enemies = new List<Enemy>();
         //---
         enemyAlive = new List<bool>();
@@ -80,6 +83,7 @@ class Game
 
 
         finished = false;
+        finishedESC = false;
 
         Random rnd = new Random();
         for (int i = 0; i < enemies.Count; i++)
@@ -157,6 +161,8 @@ class Game
 
         imageArrowP1 = new Image("data/1player.png");
         imageArrowP2 = new Image("data/2player.png");
+
+        
 
     }
 
@@ -242,6 +248,19 @@ class Game
             0xC0, 0xC0, 0xC0,
             font24);
 
+        SdlHardware.WriteHiddenText("ESC " 
+            + ChooseLanguage.lenguage["toReturn"],
+            40, 600,
+            0xC0, 0xC0, 0xC0,
+            font24);
+
+        if (Room.bossStage)
+        {
+            SdlHardware.WriteHiddenText("BOSS STAGE",
+            400, 60,
+            0xC0, 0xC0, 0xC0,
+            font24);
+        }
         if (!player2Active)
         {
             SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["press2"] + "",
@@ -266,7 +285,7 @@ class Game
         {
             player.DrawUnbeatable();
         }
-
+        
         SdlHardware.ShowHiddenScreen();
 
         levelUp = true;
@@ -327,7 +346,7 @@ class Game
 
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
-            finished = true;
+            finishedESC = true;
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_2))
         {
@@ -355,6 +374,7 @@ class Game
                 if (SdlHardware.KeyPressed(SdlHardware.KEY_I))
                 {
                     player.SetUnbeatable(false);
+
                     Shot.Shoot(player, ref coolDownShot, 0, ref position,
                         ref activeShot);
                 }
@@ -417,7 +437,8 @@ class Game
             if (SdlHardware.KeyPressed(SdlHardware.KEY_P)
                     && player.GetcoolDownRevive() == 0)
             {
-                if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
+                if (!(enfriamientoTeletransporte > 0) 
+                    && numTeletransportes > 0)
                 {
                     player.Teletransporte();
                     enfriamientoTeletransporte = 70;
@@ -519,8 +540,9 @@ class Game
                     {
                         player2.SetUnbeatable(false);
                         activeShot2 = true;
-                        Shot.Shoot(player2, ref coolDownShot2, 1, ref position2,
-                                ref activeShot2);
+                        Shot.Shoot(player2, ref coolDownShot2, 1,
+                            ref position2,
+                            ref activeShot2);
                     }
                 }
 
@@ -573,7 +595,7 @@ class Game
             activeShot2 = false;
             player2Active = false;
         }
-        if (player.GetLives()<=0)
+        if (player.GetLives()<=0 && !Tricks.immortal)
         {
             player.SetAlive(false);
         }
@@ -587,10 +609,10 @@ class Game
             if (player2.GetUnbeatable() == false)
                 Player.CollisionPlayer(ref player2);
             
-            if (player2.GetLives() <= 0)
+            if (player2.GetLives() <= 0 && !Tricks.immortal)
                 player2.SetAlive(false);
         }
-        if (finished == true)
+        if (finished == true || finishedESC == true)
         {
             try
             {
@@ -598,7 +620,9 @@ class Game
                 {
                     inputMaxScore = new StreamReader(fileMaxScore);
                 }
+                
                 string line = inputMaxScore.ReadLine();
+                inputMaxScore.Close();
                 maxScore = Convert.ToInt32(line);
                 if (score > maxScore)
                 {
@@ -606,9 +630,8 @@ class Game
                     File.WriteAllText(fileMaxScore,
                             Convert.ToString(score));
                 }
-                inputMaxScore.Close();
-                score = 0;
                 Score.Run(score, maxScore);
+                score = 0;
             }
             catch (Exception e)
             {
@@ -633,7 +656,7 @@ class Game
             PauseUntilNextFrame();
             CheckGameStatus();
         }
-        while (!finished);
+        while (!finished && !finishedESC);
        
     }
 }

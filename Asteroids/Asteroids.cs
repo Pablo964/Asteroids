@@ -5,9 +5,8 @@
         bool fullScreen = false;
         SdlHardware.Init(1024, 700, 24, fullScreen);
 
-        WelcomeScreen w = new WelcomeScreen();
         ChooseLanguage l = new ChooseLanguage();
-
+        WelcomeScreen w = new WelcomeScreen();
         do
         {
             if (l.GetChosenOption() == 0)
@@ -31,6 +30,11 @@
                 {
                     CreditsScreen credits = new CreditsScreen();
                     credits.Run();
+                }
+                else if (w.GetChosenOption() == 5)
+                {
+                    Tricks tricks  = new Tricks();
+                    tricks.Run();
                 }
             }
 

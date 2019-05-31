@@ -1,11 +1,4 @@
-﻿/**
- * Font.cs - To hide SDL TTF font handling
- * 
- * Changes:
- * 0.01, 24-jul-2013: Initial version, based on SdlMuncher 0.02
- */
-
-using System;
+﻿using System;
 using Tao.Sdl;
 
 class Font

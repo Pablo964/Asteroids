@@ -4,6 +4,8 @@ using System.Linq;
 class Shot : Sprite
 {
     protected int shotSpeed;
+    static Sound fireSound, deathEnemySound;
+    protected static int quantityEnemiesInBoss = 6;
 
     public Shot()
     {
@@ -14,23 +16,34 @@ class Shot : Sprite
         width = 10;
         height = 10;
         shotSpeed = 45;
+
+        fireSound = new Sound("data/asteroidsFire.wav");
+        deathEnemySound = new Sound("data/asteroidsDeath.wav");
     }
 
     public int GetshotSpeed() { return shotSpeed; }
     public void SetshotSpeed() { this.shotSpeed = 22; }
 
-    public static void CollisionShot(int posShot, ref bool activeShot)
+    public static void CollisionShot(int shotPlayer, ref bool activeShot)
     {
+        
         for (int i = 0; i < Game.enemies.Count; i++)
         {
-            if ((Game.shot[posShot].CollisionsWith(Game.enemies[i])
+            if ((Game.shot[shotPlayer].CollisionsWith(Game.enemies[i])
                        && Game.enemyAlive[i] == true
                        && activeShot == true)
                        && Game.enemies[i].TypeEnemy() != "smallAsteroid")
             {
+
                 Game.enemyAlive[i] = false;
+
+                if (shotPlayer == 0)
+                    deathEnemySound.PlayOnce();
+                else
+                    deathEnemySound.PlayOnce();
+
                 activeShot = false;
-                
+
                 Random rnd = new Random();
 
                 for (int j = 0; j < 2; j++)
@@ -53,23 +66,51 @@ class Shot : Sprite
                     Game.enemyAlive.Add(true);
                     Game.enemies[j].DrawOnHiddenScreen();
                 }
+                if (Game.enemies[i].TypeEnemy() == "boss")
+                {
+                    for (int x = 0; x < quantityEnemiesInBoss; x++)
+                    {
+                    
+                        Game.enemies.Add(new Enemy());
+                        Game.enemies.Last().MoveTo(Game.enemies[i].GetX(),
+                            Game.enemies[i].GetY());
 
-                Game.score += 20;
+                        Game.enemies.Last().SetSpeed(rnd.Next(1, 10),
+                            rnd.Next(1, 10));
+
+                        Game.enemyAlive.Add(true);
+                        Game.enemies[x].DrawOnHiddenScreen();
+                    }
+                    
+                }
+                if (Tricks.morePoints)
+                {
+
+                    Game.score += 200;
+                }
+                else
+                {
+                    Game.score += 20;
+                }
             }
-            else if (Game.shot[posShot].CollisionsWith(Game.enemies[i])
+            else if (Game.shot[shotPlayer].CollisionsWith(Game.enemies[i])
                     && Game.enemyAlive[i] == true
                     && activeShot == true
                     && Game.enemies[i].TypeEnemy() == "smallAsteroid")
             {
+                deathEnemySound.PlayOnce();
                 Game.enemyAlive[i] = false;
                 activeShot = false;
             }
         }
     }
-
+    
     public static void Shoot(Player player, ref int coolDownShot, 
             int positionShot, ref int positionSprite, ref bool activeShot)
     {
+
+        fireSound.PlayOnce();
+
         Game.shot[positionShot].MoveTo(player.GetX() + 12, player.GetY() + 16);
         Game.shot[positionShot].LoadImage(Game.GetImageShot());
 

@@ -7,7 +7,10 @@ class Room
     protected int mapHeight = 14, mapWidth = 35;
     protected int tileWidth = 51, tileHeight = 38;
     protected int leftMargin = 0, topMargin = 0;
-    
+    public static int quantityLevelToBoss = 2;
+    public static bool bossStage = false;
+    static Sound soundBoss;
+
     //aumentar array
     protected string[] levelData =
     {
@@ -30,7 +33,7 @@ class Room
     {
         stars1 = new Image("data/estrellas3.png");
         stars2 = new Image("data/estrellas4.png");
-        
+        soundBoss = new Sound("data/bossStage.mp3");
     }
 
     public void DrawOnHiddenScreen()
@@ -43,9 +46,10 @@ class Room
                 int posY = row * tileHeight + topMargin;
                 switch (levelData[row][col])
                 {
-                    case '1': SdlHardware.DrawHiddenImage(stars1, posX, posY); break;
-                    case '2': SdlHardware.DrawHiddenImage(stars2, posX, posY); break;
-
+                    case '1': SdlHardware.DrawHiddenImage(stars1, posX, posY);
+                        break;
+                    case '2': SdlHardware.DrawHiddenImage(stars2, posX, posY);
+                        break;
                 }
             }
         }
@@ -55,21 +59,34 @@ class Room
             ref Player player)
     {
         Game.level += 1;
+
         if (Game.numEnemies < 20)
         {
-            Game.numEnemies += 2;
+            if (Game.level % quantityLevelToBoss == 0)
+                Game.numEnemies++;
+            else
+                Game.numEnemies += 2;
         }
-        if (maxVelocidad < 35)
+        if (maxVelocidad < 25)
         {
-            maxVelocidad += 2;
+            maxVelocidad += 1;
         }
 
-
-        for (int i = 0; i < Game.numEnemies; i++)
+        if (Game.level % quantityLevelToBoss == 0)
         {
-            Game.enemies.Add(new Enemy());
+            bossStage = true;
+            soundBoss.BackgroundPlay();
+            Game.enemies.Add(new Boss());
         }
-
+        else
+        {
+            soundBoss.StopMusic();
+            bossStage = false;
+            for (int i = 0; i < Game.numEnemies; i++)
+            {
+                Game.enemies.Add(new Enemy());
+            }
+        }
         finished = false;
 
         Random rnd = new Random();
@@ -92,7 +109,6 @@ class Room
         {
             Game.enemyAlive.Add(true);
         }
-    }
-   
 
+    }
 }
