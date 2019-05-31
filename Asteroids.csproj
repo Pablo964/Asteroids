@@ -67,6 +67,7 @@
     <Compile Include="SmallAsteroid.cs" />
     <Compile Include="Sound.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="Tricks.cs" />
     <Compile Include="WelcomeScreen.cs" />
   </ItemGroup>
   <ItemGroup>

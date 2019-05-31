@@ -43,6 +43,7 @@ class Game
     protected Room room;
 
     public static bool finished;
+    public static bool finishedESC;
     public static int score;
     public static int maxScore;
     public static StreamReader inputMaxScore;
@@ -82,6 +83,7 @@ class Game
 
 
         finished = false;
+        finishedESC = false;
 
         Random rnd = new Random();
         for (int i = 0; i < enemies.Count; i++)
@@ -204,7 +206,6 @@ class Game
 
         for (int i = 0; i < enemies.Count; i++)
         {
-            Console.WriteLine("Enemies game: " + enemies.Count);
             if (enemyAlive[i] != false)
             {
                 enemies[i].DrawOnHiddenScreen();
@@ -244,6 +245,12 @@ class Game
         SdlHardware.WriteHiddenText(ChooseLanguage.lenguage["score"] + " "
                 + score,
             400, 40,
+            0xC0, 0xC0, 0xC0,
+            font24);
+
+        SdlHardware.WriteHiddenText("ESC " 
+            + ChooseLanguage.lenguage["quit"],
+            40, 600,
             0xC0, 0xC0, 0xC0,
             font24);
 
@@ -339,7 +346,7 @@ class Game
 
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_ESC))
-            finished = true;
+            finishedESC = true;
 
         if (SdlHardware.KeyPressed(SdlHardware.KEY_2))
         {
@@ -430,7 +437,8 @@ class Game
             if (SdlHardware.KeyPressed(SdlHardware.KEY_P)
                     && player.GetcoolDownRevive() == 0)
             {
-                if (!(enfriamientoTeletransporte > 0) && numTeletransportes > 0)
+                if (!(enfriamientoTeletransporte > 0) 
+                    && numTeletransportes > 0)
                 {
                     player.Teletransporte();
                     enfriamientoTeletransporte = 70;
@@ -532,8 +540,9 @@ class Game
                     {
                         player2.SetUnbeatable(false);
                         activeShot2 = true;
-                        Shot.Shoot(player2, ref coolDownShot2, 1, ref position2,
-                                ref activeShot2);
+                        Shot.Shoot(player2, ref coolDownShot2, 1,
+                            ref position2,
+                            ref activeShot2);
                     }
                 }
 
@@ -586,7 +595,7 @@ class Game
             activeShot2 = false;
             player2Active = false;
         }
-        if (player.GetLives()<=0)
+        if (player.GetLives()<=0 && !Tricks.immortal)
         {
             player.SetAlive(false);
         }
@@ -600,10 +609,10 @@ class Game
             if (player2.GetUnbeatable() == false)
                 Player.CollisionPlayer(ref player2);
             
-            if (player2.GetLives() <= 0)
+            if (player2.GetLives() <= 0 && !Tricks.immortal)
                 player2.SetAlive(false);
         }
-        if (finished == true)
+        if (finished == true || finishedESC == true)
         {
             try
             {
@@ -623,12 +632,12 @@ class Game
                 }
                 Score.Run(score, maxScore);
                 score = 0;
+                player2Active = false;
             }
             catch (Exception e)
             {
                 maxScore = score;
                 Score.Run(score, maxScore);
-                Console.WriteLine(e.Message);
             }
         }
     }
@@ -648,7 +657,7 @@ class Game
             PauseUntilNextFrame();
             CheckGameStatus();
         }
-        while (!finished);
+        while (!finished && !finishedESC);
        
     }
 }

@@ -7,7 +7,7 @@ class Room
     protected int mapHeight = 14, mapWidth = 35;
     protected int tileWidth = 51, tileHeight = 38;
     protected int leftMargin = 0, topMargin = 0;
-    protected int quantityLevelToBoss = 2;
+    public static int quantityLevelToBoss = 2;
     public static bool bossStage = false;
     static Sound soundBoss;
 
@@ -46,9 +46,10 @@ class Room
                 int posY = row * tileHeight + topMargin;
                 switch (levelData[row][col])
                 {
-                    case '1': SdlHardware.DrawHiddenImage(stars1, posX, posY); break;
-                    case '2': SdlHardware.DrawHiddenImage(stars2, posX, posY); break;
-
+                    case '1': SdlHardware.DrawHiddenImage(stars1, posX, posY);
+                        break;
+                    case '2': SdlHardware.DrawHiddenImage(stars2, posX, posY);
+                        break;
                 }
             }
         }

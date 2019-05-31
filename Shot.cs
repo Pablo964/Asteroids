@@ -83,7 +83,15 @@ class Shot : Sprite
                     }
                     
                 }
-                Game.score += 20;
+                if (Tricks.morePoints)
+                {
+
+                    Game.score += 200;
+                }
+                else
+                {
+                    Game.score += 20;
+                }
             }
             else if (Game.shot[shotPlayer].CollisionsWith(Game.enemies[i])
                     && Game.enemyAlive[i] == true

@@ -24,7 +24,7 @@
   <Class Name="Game">
     <Position X="16.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAICAQQACABAACAAFIBIIAEUQhEAAQgjiIAgAAgAAgI=</HashCode>
+      <HashCode>QEICAQQACARAACAAFIBIIAEUUhcAAQgjmIAgAAgAAgI=</HashCode>
       <FileName>Game.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -38,19 +38,19 @@
   <Class Name="Player">
     <Position X="1.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIEAAAAAAIAAAAAAAAAgAAAAAAAAAACISAAAAABAAAA=</HashCode>
+      <HashCode>AIECAgAQAIACEIQCAAAoQAAABAJIIMCACgAAKABIAAA=</HashCode>
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Room">
     <Position X="14.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQACBAAAAAAAIAAAAIAEAAAAAgAAAIAAAAEAAAAAE=</HashCode>
+      <HashCode>AAAQACBAAAAAAAIAAAAIAEAAAAAgAAAJAAAAEAAAIAE=</HashCode>
       <FileName>Room.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Score">
-    <Position X="9.75" Y="4.25" Width="1.5" />
+    <Position X="10.25" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAgAACAAAAI=</HashCode>
       <FileName>Score.cs</FileName>
@@ -59,26 +59,26 @@
   <Class Name="Shot">
     <Position X="4.25" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAABAAAAEAAAAAAAAAIAQAASAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAQICABAAAAMAAAAAAAAAIAQABQAQAAAAAAAA=</HashCode>
       <FileName>Shot.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Sprite" Collapsed="true">
     <Position X="2.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EBAAAIAAgIAAFgQg0AAAAlBJECMOAyAgYQhgKEAAACA=</HashCode>
+      <HashCode>EBAAAIAAgIAAFgQg0AAAAlBJECMOAzAgYQhgKEAAACA=</HashCode>
       <FileName>Sprite.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WelcomeScreen">
     <Position X="12.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAQAAIAIAAAAAAAAAAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAAAAAAAAAAAQAgIAIAAAIAAAAAAAAAAAAAAAAAAAII=</HashCode>
       <FileName>WelcomeScreen.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ChooseLanguage">
-    <Position X="14.5" Y="4.25" Width="1.5" />
+    <Position X="14.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAACQAAIAIAAAAAAAAAAEAAACAgAAIAAAAI=</HashCode>
       <FileName>ChooseLenguage.cs</FileName>
@@ -91,14 +91,14 @@
       <FileName>Font.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MediumAsteroid" Collapsed="true">
-    <Position X="7" Y="5.25" Width="1.5" />
+  <Class Name="MediumAsteroid">
+    <Position X="6" Y="4" Width="1.5" />
     <InheritanceLine Type="Enemy" FixedToPoint="true">
       <Path>
         <Point X="7.75" Y="2.954" />
-        <Point X="7.75" Y="4.875" />
-        <Point X="7.562" Y="4.875" />
-        <Point X="7.562" Y="5.25" />
+        <Point X="7.75" Y="3.625" />
+        <Point X="6.562" Y="3.625" />
+        <Point X="6.562" Y="4" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -118,6 +118,37 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>SmallAsteroid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tricks">
+    <Position X="7.25" Y="6" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAABCAAAAAACQAAIAIAAAAAAAAAAAAAACAAAAAAAAAI=</HashCode>
+      <FileName>Tricks.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sound">
+    <Position X="10.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAUAAAAAAAAAAAAQAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Sound.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Boss">
+    <Position X="8.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Boss.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Controls" Collapsed="true">
+    <Position X="4.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Controls.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

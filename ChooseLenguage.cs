@@ -130,8 +130,16 @@ class ChooseLanguage
                         "invencibles hasta que disparemos");
                     lenguage.Add("chooseP2", "Para jugar con el segundo" +
                         " jugador pulse 2 en el juego");
-
-
+                    lenguage.Add("tricks", "trucos");
+                    lenguage.Add("immortal", "inmortal");
+                    lenguage.Add("yes", "si");
+                    lenguage.Add("no", "no");
+                    lenguage.Add("morePoints", "más puntos");
+                    lenguage.Add("instructionsTricks1", "use las flechas " +
+                        "arriba y abajo para desplazarse");
+                    lenguage.Add("instructionsTricks2", "y use las flechas " +
+                        "izq y der para cambiar la selección");
+                    lenguage.Add("bossEvery", "jefe cada ");
                     break;
                 case 300:
                     option = 2;
@@ -151,7 +159,8 @@ class ChooseLanguage
                     lenguage.Add("player1", "player 1");
                     lenguage.Add("player2", "player 2");
                     lenguage.Add("moveP1", "to rotate to the left press " +
-                        "the left arrow and to rotate the right arrow to the right");
+                        "the left arrow and to rotate the right arrow " +
+                        "to the right");
                     lenguage.Add("control2", "to shoot press");
                     lenguage.Add("control3", "to move press");
                     lenguage.Add("control4", "to teleport press");
@@ -170,6 +179,17 @@ class ChooseLanguage
                         "invincible until we fire.");
                     lenguage.Add("chooseP2", "To play with the second " +
                         "player press 2 in the game");
+                    lenguage.Add("tricks", "tricks");
+                    lenguage.Add("immortal", "immortal");
+                    lenguage.Add("yes", "yes");
+                    lenguage.Add("no", "no");
+                    lenguage.Add("morePoints", "more points");
+                    lenguage.Add("instructionsTricks1", "use the arrows " +
+                        "up and down to scroll");
+                    lenguage.Add("instructionsTricks2", "and use the arrows "+
+                        "left and right to change the selection");
+                    lenguage.Add("bossEvery", "boss every ");
+
                     break;
 
                 case 400:
@@ -185,7 +205,8 @@ class ChooseLanguage
                     lenguage.Add("lives1", "vies p1");
                     lenguage.Add("lives2", "vies p2");
                     lenguage.Add("unbeatable", "imbattable");
-                    lenguage.Add("controlsAndMore", "contrôles et plus encore");
+                    lenguage.Add("controlsAndMore", "contrôles et " +
+                        "plus encore");
                     lenguage.Add("controls", "commandes");
                     lenguage.Add("player1", "joueur 1");
                     lenguage.Add("player2", "joueur 2");
@@ -195,7 +216,8 @@ class ChooseLanguage
                     lenguage.Add("control2", "pour tirer appuyez sur le");
                     lenguage.Add("control3", "pour déplacer, appuyez sur " +
                         "les touches");
-                    lenguage.Add("control4", "Pour se téléporter, appuyez sur");
+                    lenguage.Add("control4", "Pour se téléporter, " +
+                        "appuyez sur");
                     lenguage.Add("moveP2", "pour tourner vers la gauche, " +
                         "appuyez sur 'q' la et pour faire" +
                         " pivoter 'e' la droite");
@@ -212,13 +234,22 @@ class ChooseLanguage
                         "invincibles jusqu'à ce qu'on tire.");
                     lenguage.Add("chooseP2", "Pour jouer avec le deuxième" +
                         " joueur, appuyez sur 2 dans le jeu.");
+                    lenguage.Add("tricks", "trucs");
+                    lenguage.Add("immortal", "immortel");
+                    lenguage.Add("yes", "oui");
+                    lenguage.Add("no", "pas");
+                    lenguage.Add("morePoints", "plus de points");
+                    lenguage.Add("instructionsTricks1", "utiliser les flèches"+
+                        " vers le haut et vers le bas défiler");
+                    lenguage.Add("instructionsTricks2", "et utilisez les " +
+                        "flèches gauche et droite pour sélection.");
+                    lenguage.Add("bossEvery", "boss tous les");
                     break;
             }
             shotX = 500;
             activeShot = false;
         }
-
-        SdlHardware.Pause(120); // To avoid using 100% CPU        
+        SdlHardware.Pause(120);      
     }
 }
 

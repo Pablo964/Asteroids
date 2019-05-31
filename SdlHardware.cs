@@ -59,6 +59,7 @@ class SdlHardware
             (short)SdlMixer.MIX_DEFAULT_FORMAT, 2, 1024);
     }
 
+
     public static void ClearScreen()
     {
         Sdl.SDL_Rect origin = new Sdl.SDL_Rect(0, 0, width, height);
@@ -128,6 +129,7 @@ class SdlHardware
 
         Sdl.SDL_BlitSurface(textoComoImagen, ref origen,
             hiddenScreen, ref dest);
+        Sdl.SDL_FreeSurface(textoComoImagen);
     }
 
     // Scroll Methods
