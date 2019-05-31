@@ -249,7 +249,7 @@ class Game
             font24);
 
         SdlHardware.WriteHiddenText("ESC " 
-            + ChooseLanguage.lenguage["toReturn"],
+            + ChooseLanguage.lenguage["quit"],
             40, 600,
             0xC0, 0xC0, 0xC0,
             font24);
@@ -632,6 +632,7 @@ class Game
                 }
                 Score.Run(score, maxScore);
                 score = 0;
+                player2Active = false;
             }
             catch (Exception e)
             {

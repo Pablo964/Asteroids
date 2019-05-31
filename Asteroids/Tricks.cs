@@ -170,4 +170,3 @@ class Tricks
         } while (!SdlHardware.KeyPressed(SdlHardware.KEY_R));
     }
 }
-
